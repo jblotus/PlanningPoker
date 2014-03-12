@@ -5,9 +5,9 @@ require '../vendor/autoload.php';
 use Aura\Sql\ExtendedPdo;
 
 $pdo = new ExtendedPdo(
-  'mysql:host=localhost;dbname=pp',
-  'root',
-  ''
+    'mysql:host=localhost;dbname=pp',
+    'root',
+    ''
 );
 
 $estimateTable = new jblotus\PlanningPoker\EstimateTableGateway($pdo);

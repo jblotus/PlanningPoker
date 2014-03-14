@@ -13,6 +13,6 @@ $pdo = new ExtendedPdo(
 $estimateTable = new jblotus\PlanningPoker\EstimateTableGateway($pdo);
 
 $pointValue = mt_rand();
-echo $estimateTable->recordEstimate($pointValue);
+echo $estimateTable->insertEstimateWithPoints($pointValue);
 
-echo '<pre>' . print_r($estimateTable->getAllEstimates(), 1) . '</pre>';
+echo '<pre>' . print_r($estimateTable->selectAllFromEstimates(), 1) . '</pre>';

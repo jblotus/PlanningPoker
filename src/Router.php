@@ -3,14 +3,20 @@
 namespace jblotus\PlanningPoker;
 
 use Aura\Router\Router as AuraRouter;
+use Aura\Web\Request as Request;
+use Aura\Web\Response as Response;
 
 class Router
 {
     private $router;
+    private $request;
+    private $response;
     
-    public function __construct(AuraRouter $router)
+    public function __construct(AuraRouter $router, Request $request, Response $response)
     {
         $this->router = $router;
+        $this->request = $request;
+        $this->response = $response;
     }
     public function initialize()
     {                
@@ -22,25 +28,12 @@ class Router
             ));
         
         // get the incoming request URL path
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = parse_url($this->request->server->get('REQUEST_URI'), PHP_URL_PATH);
         
         // get the route based on the path and server
-        $route = $this->router->match($path, $_SERVER);
+        $route = $this->router->match($path, $this->request->server->get());
         
-        if (!$route) {
-            // no route object was returned
-            echo "No application route was found for that URL path.";
-            exit();
-        }
-        // get the route params
-        $params = $route->params;
-        
-        // extract the controller callable from the params
-        $controller = $params['controller'];
-        unset($params['controller']);
-        
-        // invoke the callable
-        $controller($params);
+        return $route;
     }
     
 }

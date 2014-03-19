@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f9b6efd37e1b9d3ce5508de7a925a043",
+    "hash": "7db2d394cf44e7997703f597ccabef89",
     "packages": [
         {
             "name": "aura/router",
@@ -110,6 +110,55 @@
                 "sqlsrv"
             ],
             "time": "2014-03-15 15:16:46"
+        },
+        {
+            "name": "aura/web",
+            "version": "dev-develop-2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Web.git",
+                "reference": "897f58e8467f8eefdb62e5864e6b1d89928e23a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Web/zipball/897f58e8467f8eefdb62e5864e6b1d89928e23a2",
+                "reference": "897f58e8467f8eefdb62e5864e6b1d89928e23a2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                },
+                "branch-alias": {
+                    "dev-develop-2": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Web\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Web Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Web/contributors"
+                }
+            ],
+            "description": "Provides web Request and Response objects for use by web controllers. These are representations of the PHP web environment, not HTTP request and response objects proper.",
+            "homepage": "https://github.com/auraphp/Aura.Web/releases",
+            "keywords": [
+                "request",
+                "response"
+            ],
+            "time": "2014-03-15 15:18:33"
         }
     ],
     "packages-dev": [
@@ -745,7 +794,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "aura/sql": 20,
-        "aura/router": 20
+        "aura/router": 20,
+        "aura/web": 20
     },
     "platform": [
 

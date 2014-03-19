@@ -19,14 +19,24 @@ class Router
         $this->response = $response;
     }
     public function initialize()
-    {                
-        $this->router->add('home', "/")
+    {      
+        $this->defineRoutes();        
+        return $this->getCurrentRoute();
+    }
+    
+    private function defineRoutes()
+    {
+        $this->router
+            ->add('home', "/")
             ->addValues(array(
                 'controller'=> function(array $params) {
                     echo 'foo';
                 }
             ));
-        
+    }
+    
+    private function getCurrentRoute()
+    {
         // get the incoming request URL path
         $path = parse_url($this->request->server->get('REQUEST_URI'), PHP_URL_PATH);
         

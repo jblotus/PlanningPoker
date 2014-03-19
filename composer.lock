@@ -3,8 +3,63 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "7db2d394cf44e7997703f597ccabef89",
+    "hash": "b5c5536b2b253067655abb3c7ab86305",
     "packages": [
+        {
+            "name": "aura/di",
+            "version": "dev-develop-2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Di.git",
+                "reference": "c6efdf2ed4816c505af4f5b8f074ed7832330023"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/c6efdf2ed4816c505af4f5b8f074ed7832330023",
+                "reference": "c6efdf2ed4816c505af4f5b8f074ed7832330023",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                },
+                "branch-alias": {
+                    "dev-develop-2": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Di\\": "src/"
+                },
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Di Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Di/contributors"
+                }
+            ],
+            "description": "Provides a dependency injection container system with native support for constructor- and setter-based injection, lazy-loading of services, and inheritable configuration of setters and constructor params.",
+            "homepage": "https://github.com/auraphp/Aura.Di/releases",
+            "keywords": [
+                "container",
+                "dependency injection",
+                "dependency injection container",
+                "di",
+                "di container"
+            ],
+            "time": "2014-03-15 15:12:18"
+        },
         {
             "name": "aura/router",
             "version": "dev-develop-2",
@@ -795,7 +850,8 @@
     "stability-flags": {
         "aura/sql": 20,
         "aura/router": 20,
-        "aura/web": 20
+        "aura/web": 20,
+        "aura/di": 20
     },
     "platform": [
 

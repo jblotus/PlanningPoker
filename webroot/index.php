@@ -1,29 +1,38 @@
 <?php
 // autoloader
 require '../vendor/autoload.php';
-
+use Aura\Di\Container;
+use Aura\Di\Factory;
 use Aura\Sql\ExtendedPdo;
 use Aura\Router\RouterFactory;
 use Aura\Web\WebFactory;
 
-$pdo = new ExtendedPdo(
-    'mysql:host=localhost;dbname=pp',
-    'root',
-    ''
-);
 
-$router = (new RouterFactory)->newInstance(); 
+$di = new Container(new Factory);
+$di->set('database', new ExtendedPdo('mysql:host=localhost;dbname=pp', 'root', ''));
 
-//without this $_SERVER does not get added to globals
-//http://www.php.net/manual/en/ini.core.php#ini.auto-globals-jit
-$_SERVER;
+$di->set('webfactory', function() {    
+    //without this $_SERVER does not get added to globals
+    //http://www.php.net/manual/en/ini.core.php#ini.auto-globals-jit
+    $_SERVER;
+    
+    return new WebFactory($GLOBALS);
+});
 
-$webFactory = new WebFactory($GLOBALS);
+$di->set('router', function() use ($di) {
+        
+    $webFactory = $di->get('webfactory');
+    
+    $router = (new RouterFactory)->newInstance(); 
+    $request = $webFactory->newRequest();
+    $response = $webFactory->newResponse();
+    
+    return new jblotus\PlanningPoker\Router($router, $request, $response);
+});
 
-$request = $webFactory->newRequest();
-$response = $webFactory->newResponse();
+$appRouter = $di->get('router');
 
-$appRouter = new jblotus\PlanningPoker\Router($router, $request, $response);
+
 $route = $appRouter->initialize();
 
 if (!$route) {

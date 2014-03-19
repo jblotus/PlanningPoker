@@ -3,6 +3,7 @@
 require '../vendor/autoload.php';
 
 use Aura\Sql\ExtendedPdo;
+use Aura\Router\RouterFactory;
 
 $pdo = new ExtendedPdo(
     'mysql:host=localhost;dbname=pp',
@@ -10,9 +11,8 @@ $pdo = new ExtendedPdo(
     ''
 );
 
-$estimateTable = new jblotus\PlanningPoker\EstimateTableGateway($pdo);
 
-$pointValue = mt_rand();
-echo $estimateTable->insertEstimateWithPoints($pointValue);
+$router = (new RouterFactory)->newInstance(); 
 
-echo '<pre>' . print_r($estimateTable->selectAllFromEstimates(), 1) . '</pre>';
+$appRouter = new jblotus\PlanningPoker\Router($router);
+$appRouter->initialize();

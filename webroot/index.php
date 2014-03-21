@@ -48,11 +48,9 @@ $di->set('view', function() {
         new Finder      // layout-template finder
     );
     $layoutTemplate = function () {
-        echo '<html>'
-            . '<head><title>' . $this->safeHtml($this->title) . '</title></head>'
-            . '<body>' . $this->content . '</body>'
-            . '</html>';
+        require_once VIEW_ROOT . '/layouts/default.html.php';       
     };
+    
     return new View($viewManager, $layoutTemplate);
 });
 

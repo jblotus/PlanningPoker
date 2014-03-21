@@ -1,4 +1,1 @@
-<html>
- <?php echo 'foo'; ?>
-    
-</html>
+<p>Hello <?php echo $this->safeHtml($this->name) ?> Your email address is <?php echo $this->safeHtml($this->email) ?></p>

@@ -2,6 +2,9 @@
 // autoloader
 require '../vendor/autoload.php';
 
+define('APP_ROOT', dirname(dirname(__FILE__)));
+define('VIEW_ROOT', APP_ROOT . '/views/');
+
 use Aura\Di\Container;
 use Aura\Di\Factory;
 use Aura\Sql\ExtendedPdo;

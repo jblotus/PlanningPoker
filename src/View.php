@@ -16,9 +16,13 @@ class View
         $this->layoutTemplate = $layoutTemplate;
     }
     
-    public function render(array $data, callable $template)
+    public function render(array $data, $path)
     {
         $data['title'] = 'Any title';
+        $template = function() use ($path) {
+            require_once $path;   
+        };
+        
         return $this->viewManager->render($data, $template, $this->layoutTemplate);
     }
 }

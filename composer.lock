@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "b5c5536b2b253067655abb3c7ab86305",
+    "hash": "f66300d93d0217406f4eb902bb9b7382",
     "packages": [
         {
             "name": "aura/di",
@@ -167,6 +167,59 @@
             "time": "2014-03-15 15:16:46"
         },
         {
+            "name": "aura/view",
+            "version": "dev-develop-2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.View.git",
+                "reference": "b7359d691351c6736fb704bf77a84aa8d9699306"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.View/zipball/b7359d691351c6736fb704bf77a84aa8d9699306",
+                "reference": "b7359d691351c6736fb704bf77a84aa8d9699306",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                },
+                "branch-alias": {
+                    "dev-develop-2": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\View\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.View Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.View/contributors"
+                }
+            ],
+            "description": "Provides an implementation of the TemplateView and TwoStepView patterns, with support for helpers and stacks, using PHP itself as the templating language.",
+            "homepage": "http://auraphp.com/Aura.View",
+            "keywords": [
+                "template",
+                "template view",
+                "two step view",
+                "two-step view",
+                "twostep view",
+                "view"
+            ],
+            "time": "2014-03-15 15:18:13"
+        },
+        {
             "name": "aura/web",
             "version": "dev-develop-2",
             "source": {
@@ -219,23 +272,23 @@
     "packages-dev": [
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.0.2",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "2c20ba4872d09d1d3d7ceda5a0c5f82d9a8ff31f"
+                "reference": "a05618d03c60eb07b37432583aabf80ae5f5f447"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2c20ba4872d09d1d3d7ceda5a0c5f82d9a8ff31f",
-                "reference": "2c20ba4872d09d1d3d7ceda5a0c5f82d9a8ff31f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/a05618d03c60eb07b37432583aabf80ae5f5f447",
+                "reference": "a05618d03c60eb07b37432583aabf80ae5f5f447",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "phpunit/php-file-iterator": "~1.3.1",
                 "phpunit/php-text-template": "~1.2",
-                "phpunit/php-token-stream": "~1.1.3",
+                "phpunit/php-token-stream": "~1.2.2",
                 "sebastian/environment": "~1.0",
                 "sebastian/version": "~1.0.3"
             },
@@ -279,7 +332,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-03-17 10:25:49"
+            "time": "2014-03-20 16:12:25"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -416,16 +469,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.1.8",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "66a29f0c5bdf85e70112f25ec9072efec5e2d426"
+                "reference": "ad4e1e23ae01b483c16f600ff1bebec184588e32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/66a29f0c5bdf85e70112f25ec9072efec5e2d426",
-                "reference": "66a29f0c5bdf85e70112f25ec9072efec5e2d426",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/ad4e1e23ae01b483c16f600ff1bebec184588e32",
+                "reference": "ad4e1e23ae01b483c16f600ff1bebec184588e32",
                 "shasum": ""
             },
             "require": {
@@ -433,6 +486,11 @@
                 "php": ">=5.3.3"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "PHP/"
@@ -457,20 +515,20 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2013-08-02 19:10:55"
+            "time": "2014-03-03 05:10:30"
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.0.11",
+            "version": "4.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "566b51d0237ce2af12a777ce2ea6fc49b787dbd9"
+                "reference": "e7631ea91f9e41149c55527047b5dee94538ae1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/566b51d0237ce2af12a777ce2ea6fc49b787dbd9",
-                "reference": "566b51d0237ce2af12a777ce2ea6fc49b787dbd9",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e7631ea91f9e41149c55527047b5dee94538ae1d",
+                "reference": "e7631ea91f9e41149c55527047b5dee94538ae1d",
                 "shasum": ""
             },
             "require": {
@@ -532,7 +590,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-03-18 15:45:22"
+            "time": "2014-03-20 16:22:50"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -851,7 +909,8 @@
         "aura/sql": 20,
         "aura/router": 20,
         "aura/web": 20,
-        "aura/di": 20
+        "aura/di": 20,
+        "aura/view": 20
     },
     "platform": [
 

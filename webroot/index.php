@@ -7,6 +7,12 @@ use Aura\Di\Factory;
 use Aura\Sql\ExtendedPdo;
 use Aura\Router\RouterFactory;
 use Aura\Web\WebFactory;
+use Aura\View\Finder;
+use Aura\View\Helper;
+use Aura\View\Manager;
+use Aura\View\Template;
+use jblotus\PlanningPoker\View;
+use jblotus\PlanningPoker\Controller;
 
 
 $di = new Container(new Factory);
@@ -31,6 +37,27 @@ $di->set('router', function() use ($di) {
     return new jblotus\PlanningPoker\Router($router, $request, $response);
 });
 
+$di->set('view', function() {
+    $viewManager = new Manager(
+        new Template,   // template factory
+        new Helper,     // bare-bones helper object
+        new Finder,     // view-template finder
+        new Finder      // layout-template finder
+    );
+    $layoutTemplate = function () {
+        echo '<html>'
+            . '<head><title>' . $this->safeHtml($this->title) . '</title></head>'
+            . '<body>' . $this->content . '</body>'
+            . '</html>';
+    };
+    return new View($viewManager, $layoutTemplate);
+});
+
+$di->set('controller', function() use ($di) {
+    $view = $di->get('view');
+    return new Controller($view);
+});
+
 $appRouter = $di->get('router');
 
 
@@ -44,9 +71,5 @@ if (!$route) {
 // get the route params
 $params = $route->params;
 
-// extract the controller callable from the params
-$controller = $params['controller'];
-unset($params['controller']);
-
-// invoke the callable
-$controller($params);
+$controller = $di->get('controller');
+echo $controller->$params['action']();

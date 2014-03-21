@@ -27,12 +27,7 @@ class Router
     private function defineRoutes()
     {
         $this->router
-            ->add('home', "/")
-            ->addValues(array(
-                'controller'=> function(array $params) {
-                    echo 'foo';
-                }
-            ));
+            ->add('home', "/");
     }
     
     private function getCurrentRoute()

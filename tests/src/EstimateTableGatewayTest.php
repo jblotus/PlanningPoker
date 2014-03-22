@@ -2,6 +2,8 @@
 
 namespace jblotus\PlanningPoker;
 
+use Aura\Sql\ExtendedPdoInterface;
+
 class EstimateTableGatewayTest extends \PHPUnit_Framework_TestCase
 {
     private $gateway;
@@ -26,6 +28,7 @@ class EstimateTableGatewayTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         
         $this->pdo = $this->getMockBuilder('Aura\Sql\ExtendedPdoInterface')
+            ->disableOriginalConstructor()
             ->getMock();
         
         $this->gateway = new EstimateTableGateway($this->pdo);

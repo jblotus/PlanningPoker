@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         src: [
           './bower_components/jquery/jquery.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
-          './webroot/assets/javascript/main.js'
+          './webroot/assets/javascript/app.js'
         ],
         dest: './webroot/assets/javascript/main.js',
       }
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
           //watched files
           './bower_components/jquery/jquery.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
-          './webroot/assets/javascript/main.js'
+          './webroot/assets/javascript/app.js'
         ],   
         tasks: ['concat:js','uglify:js'],     //tasks to run
         options: {

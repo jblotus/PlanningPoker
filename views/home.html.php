@@ -1,1 +1,4 @@
-<p>Hello <?php echo $this->safeHtml($this->name) ?> Your email address is <?php echo $this->safeHtml($this->email) ?></p>
+<h1>Planning Poker</h1>
+<p>
+  This is the app.
+</p>

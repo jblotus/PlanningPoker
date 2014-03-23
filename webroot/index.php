@@ -29,13 +29,20 @@ $di->set('webfactory', function() {
     return new WebFactory($GLOBALS);
 });
 
-$di->set('router', function() use ($di) {
-        
+$di->set('response', function() use($di) {         
     $webFactory = $di->get('webfactory');
-    
+    return $webFactory->newResponse();
+});
+
+$di->set('request', function() use ($di) {
+    $webFactory = $di->get('webfactory');
+    return $webFactory->newRequest();
+});
+
+$di->set('router', function() use ($di) {            
     $router = (new RouterFactory)->newInstance(); 
-    $request = $webFactory->newRequest();
-    $response = $webFactory->newResponse();
+    $request = $di->get('request');
+    $response = $di->get('response');
     
     return new jblotus\PlanningPoker\Router($router, $request, $response);
 });
@@ -56,7 +63,8 @@ $di->set('view', function() {
 
 $di->set('controller', function() use ($di) {
     $view = $di->get('view');
-    return new Controller($view);
+    $request = $di->get('request');
+    return new Controller($view, $request);
 });
 
 $appRouter = $di->get('router');

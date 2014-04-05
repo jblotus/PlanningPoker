@@ -27,7 +27,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->view = new View($this->viewManager, $this->layoutTemplate);
     }
     
-    public function testInsertEstimateWithPointsDoesIt()
+    public function testRenderDoesIt()
     {
         $viewData = array_merge($this->anyData, array('title' => 'Any title'));
         

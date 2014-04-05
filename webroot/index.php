@@ -17,6 +17,7 @@ use Aura\View\Template;
 use GuzzleHttp\Client as HttpClient;
 use jblotus\PlanningPoker\View;
 use jblotus\PlanningPoker\Controller;
+use jblotus\PlanningPoker\Dispatcher;
 
 
 //without this $_SERVER does not get added to globals
@@ -78,6 +79,10 @@ $di->set('controller', function() use ($di) {
     return new Controller($view, $request, $pivotalService, $response);
 });
 
+$di->set('dispatcher', function() {
+    return new Dispatcher;
+});
+
 
 $appRouter = $di->get('router');
 
@@ -95,26 +100,5 @@ $params = $route->params;
 $controller = $di->get('controller');
 $response = $controller->$params['action']();
 
-// send status line
-header($response->status->get(), true, $response->status->getCode());
-
-// send non-cookie headers
-foreach ($response->headers->get() as $label => $value) {
-    header("{$label}: {$value}");
-}
-
-// send cookies
-foreach ($response->cookies->get() as $name => $cookie) {
-    setcookie(
-        $name,
-        $cookie['value'],
-        $cookie['expire'],
-        $cookie['path'],
-        $cookie['domain'],
-        $cookie['secure'],
-        $cookie['httponly']
-    );
-}
-
-// send content
-echo $response->content->get();
+$dispatcher = $di->get('dispatcher');
+$dispatcher->outputResponseToBrowser($response);

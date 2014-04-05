@@ -15,7 +15,9 @@ use jblotus\PlanningPoker\Controller;
 use jblotus\PlanningPoker\Dispatcher;
 
 $di = new Container(new Factory);
-$di->set('database', new ExtendedPdo('mysql:host=localhost;dbname=pp', 'root', ''));
+$di->set('database', function() {
+    return new ExtendedPdo('mysql:host=localhost;dbname=pp', 'root', '');
+});
 
 $di->set('webfactory', function() {    
      

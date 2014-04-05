@@ -28,6 +28,9 @@ class Router
     {
         $this->router
             ->add('home', "/");
+        
+        $this->router
+            ->add('getPivotalStory', "/get_pivotal_story");
     }
     
     private function getCurrentRoute()

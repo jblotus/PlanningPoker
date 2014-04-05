@@ -14,18 +14,22 @@ use Aura\View\Finder;
 use Aura\View\Helper;
 use Aura\View\Manager;
 use Aura\View\Template;
+use GuzzleHttp\Client as HttpClient;
 use jblotus\PlanningPoker\View;
 use jblotus\PlanningPoker\Controller;
+
+
+//without this $_SERVER does not get added to globals
+//http://www.php.net/manual/en/ini.core.php#ini.auto-globals-jit
+$_SERVER;
+$_ENV;
 
 
 $di = new Container(new Factory);
 $di->set('database', new ExtendedPdo('mysql:host=localhost;dbname=pp', 'root', ''));
 
 $di->set('webfactory', function() {    
-    //without this $_SERVER does not get added to globals
-    //http://www.php.net/manual/en/ini.core.php#ini.auto-globals-jit
-    $_SERVER;
-    
+     
     return new WebFactory($GLOBALS);
 });
 
@@ -61,11 +65,19 @@ $di->set('view', function() {
     return new View($viewManager, $layoutTemplate);
 });
 
+$di->set('pivotalService', function() use ($di) {
+    $client = new HttpClient(); 
+    return $client;
+});
+
 $di->set('controller', function() use ($di) {
     $view = $di->get('view');
     $request = $di->get('request');
-    return new Controller($view, $request);
+    $pivotalService = $di->get('pivotalService');
+    $response = $di->get('response');
+    return new Controller($view, $request, $pivotalService, $response);
 });
+
 
 $appRouter = $di->get('router');
 
@@ -81,4 +93,28 @@ if (!$route) {
 $params = $route->params;
 
 $controller = $di->get('controller');
-echo $controller->$params['action']();
+$response = $controller->$params['action']();
+
+// send status line
+header($response->status->get(), true, $response->status->getCode());
+
+// send non-cookie headers
+foreach ($response->headers->get() as $label => $value) {
+    header("{$label}: {$value}");
+}
+
+// send cookies
+foreach ($response->cookies->get() as $name => $cookie) {
+    setcookie(
+        $name,
+        $cookie['value'],
+        $cookie['expire'],
+        $cookie['path'],
+        $cookie['domain'],
+        $cookie['secure'],
+        $cookie['httponly']
+    );
+}
+
+// send content
+echo $response->content->get();

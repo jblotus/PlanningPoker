@@ -5,8 +5,12 @@
 
 <form role="form" id="pivotal-story-loader">
   <div class="form-group">
+    <label for="pivotalProject">Pivotal Tracker Project ID</label>
+    <input type="input" class="form-control" id="pivotalProject" name="project_id" placeholder="Enter Project #">
+  </div>
+  <div class="form-group">
     <label for="pivotalStoryNumber">Pivotal Tracker Story ID</label>
-    <input type="input" class="form-control" id="pivotalStoryNumber" placeholder="Enter Story #">
+    <input type="input" class="form-control" id="pivotalStoryNumber" name="story_id" placeholder="Enter Story #">
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>

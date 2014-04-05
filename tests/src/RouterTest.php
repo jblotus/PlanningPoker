@@ -40,6 +40,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('match')
             ->with('/foo', $this->request->server->get());
         
-        $actual = $this->router->initialize();        
+        $actual = $this->router->initialize();
+        
     }
 }

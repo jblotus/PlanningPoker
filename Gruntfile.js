@@ -9,12 +9,12 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
-          './bower_components/jquery/jquery.js',
+          './bower_components/jquery/dist/jquery.js',
           './bower_components/underscore/underscore.js',
           './bower_components/backbone/backbone.js',
           './bower_components/handlebars/handlebars.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
-          './webroot/assets/javascript/app.js'
+          './webroot/assets/javascript/src/*.js'
         ],
         dest: './webroot/assets/javascript/main.js',
       }
@@ -56,9 +56,9 @@ module.exports = function(grunt) {
           //watched files
           './bower_components/jquery/jquery.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
-          './webroot/assets/javascript/app.js'
+          './webroot/assets/javascript/src/*.js'
         ],   
-        tasks: ['concat:js','uglify:js'],     //tasks to run
+        tasks: ['concat:js','uglify:js', 'karma:unit:run'],     //tasks to run
         options: {
           livereload: true                        //reloads the browser
         }
@@ -67,12 +67,20 @@ module.exports = function(grunt) {
         files: ['./webroot/assets/stylesheets/*.less'],  //watched files
         tasks: ['less'],                          //tasks to run
         options: {
-          livereload: true                        //reloads the browser
+          livereload: true
         }
       },
-      tests: {
-        files: ['src/*.php', 'tests/src/*.php'],  //the task will run only when you save files in this location
-        tasks: ['phpunit']
+      
+      tasks: {
+        files: ['src/*.php', 'tests/src/*.php', './webroot/assets/javascript/tests/*.js'],
+        tasks: ['phpunit', 'karma:unit:run']
+      }
+    },
+    
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+        background: true
       }
     }
   });
@@ -82,6 +90,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-phpunit');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-karma');
   
   grunt.registerTask('default', ['watch']);
 };

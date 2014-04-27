@@ -4,12 +4,13 @@
   var Story = Backbone.Model.extend({});
   
   var StoryView = Backbone.View.extend({
-    el: '#story',
+    el: '#current-story',
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
     },
     render: function() {      
-      var content = this.template(this.model.toJSON());        
+      var content = this.template(this.model.toJSON());
+      console.log(content);
       this.$el.html(content);
       return this;
     }

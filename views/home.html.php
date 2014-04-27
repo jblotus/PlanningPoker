@@ -3,6 +3,10 @@
   This is the app.
 </p>
 
+<h3>Current Story</h3>
+<ul id="current-story"> 
+</ul>
+
 <form role="form" id="pivotal-story-loader">
   <div class="form-group">
     <label for="pivotalProject">Pivotal Tracker Project ID</label>
@@ -14,3 +18,8 @@
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
+
+<script type="text/x-handlebars" id="story-view-template">  
+    <li>Story Name: {{name}}</li>
+    <li>Description: {{description}}</li>
+</script>

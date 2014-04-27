@@ -1,8 +1,11 @@
 window.App = window.App || {};
-(function(App, $, _, Backbone, Handlebars) {  
+(function(App, $, _, Backbone, Handlebars, Pusher) {  
   "use strict";  
   
   App.Story = Backbone.Model.extend({
+    url: function() {
+      return this.urlRoot;
+    },
     urlRoot: '/get_pivotal_story'
   });
   
@@ -64,5 +67,20 @@ window.App = window.App || {};
     //temporary autofill
     $('#pivotalProject').val(395571);
     $('#pivotalStoryNumber').val(67918638);
+    
+    //real time stuff
+    App.pusher = new Pusher('7f733af21d17ca5e5083');
+    App.Channels = {
+      current_story: App.pusher.subscribe('current-story')
+    }
+    
+    App.Channels.current_story.bind('loaded-current-story', function(data) {      
+      App.currentStoryModel.fetch({
+        data: {
+          project_id: data.project_id,
+          story_id: data.story_id
+        }
+      });
+    });
   });
-}(window.App, window.jQuery, window._, window.Backbone, window.Handlebars));
+}(window.App, window.jQuery, window._, window.Backbone, window.Handlebars, window.Pusher));

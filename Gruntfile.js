@@ -14,6 +14,7 @@ module.exports = function(grunt) {
           './bower_components/backbone/backbone.js',
           './bower_components/handlebars/handlebars.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
+          './bower_components/pusher/dist/pusher.js',
           './webroot/assets/javascript/src/*.js'
         ],
         dest: './webroot/assets/javascript/main.js',

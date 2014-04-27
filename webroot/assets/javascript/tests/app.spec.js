@@ -6,8 +6,9 @@ describe('the planning poker app', function() {
     beforeEach(function() {
       story = new App.Story();
     });
-    it('should have a custom url root', function() {
+    it('should have a custom url root that passes no id', function() {      
       expect(story.urlRoot).toBe('/get_pivotal_story');
+      expect(story.url()).toBe(story.urlRoot);
     });
   });
   

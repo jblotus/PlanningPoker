@@ -2,7 +2,8 @@
   "name": "PlanningPoker",
   "dependencies": {
     "bootstrap": "~3.1.1",
-    "backbone" : null,
-    "handlebars" : null
+    "backbone": null,
+    "handlebars": null,
+    "pusher": "~2.2.0"
   }
 }

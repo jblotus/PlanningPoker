@@ -1,14 +1,15 @@
-(function($, _, Backbone, Handlebars) {  
+window.App = window.App || {};
+(function(App, $, _, Backbone, Handlebars) {  
   "use strict";  
   
-  var Story = Backbone.Model.extend({
+  App.Story = Backbone.Model.extend({
     urlRoot: '/get_pivotal_story'
   });
   
-  var CurrentStoryView = Backbone.View.extend({
+  App.CurrentStoryView = Backbone.View.extend({
     el: '#current-story',
     initialize: function() {
-      this.listenTo(this.model, 'change', this.render);
+      this.listenTo(this.model, 'change', this.render);      
     },
     render: function() {      
       var content = this.template(this.model.toJSON());      
@@ -17,7 +18,7 @@
     }
   }); 
     
-  var StoryInputView = Backbone.View.extend({    
+  App.StoryInputView = Backbone.View.extend({    
     el: '#pivotal-story-loader',
     initialize: function() {
       _.bindAll(this, ['submit']);
@@ -44,23 +45,24 @@
   
   $(document).ready(function() {
     
-    //set up templates
-    var storyViewTemplate = Handlebars.compile($('#story-view-template').html() || '');
-    CurrentStoryView.prototype.template = storyViewTemplate;
+    //set up templates here since they are on the dom
+    App.storyViewTemplate = Handlebars.compile($('#story-view-template').html() || '');
+    App.CurrentStoryView.prototype.template = App.storyViewTemplate;
             
-    var currentStoryModel = new Story();
+    App.currentStoryModel = new App.Story();
     
-    var currentStoryView = new CurrentStoryView({
-      model: currentStoryModel
+    App.currentStoryView = new App.CurrentStoryView({
+      model: App.currentStoryModel
     });
     
-    var storyInputView = new StoryInputView({
-      model: currentStoryModel
+    App.storyInputView = new App.StoryInputView({
+      model: App.currentStoryModel
     });    
-    storyInputView.render();
+    
+    App.storyInputView.render();
     
     //temporary autofill
     $('#pivotalProject').val(395571);
     $('#pivotalStoryNumber').val(67918638);
   });
-}(window.jQuery, window._, window.Backbone, window.Handlebars));
+}(window.App, window.jQuery, window._, window.Backbone, window.Handlebars));

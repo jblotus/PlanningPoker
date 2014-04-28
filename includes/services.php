@@ -64,11 +64,28 @@ $di->set('pivotalService', function() use ($di) {
 $di->set('controller', function() use ($di) {
     $view = $di->get('view');
     $request = $di->get('request');
+    $session = $di->get('session');
     $pivotalService = $di->get('pivotalService');
-    $response = $di->get('response');
-    return new Controller($view, $request, $pivotalService, $response);
+    $response = $di->get('response');    
+    return new Controller($view, $request, $session, $pivotalService, $response);
 });
 
 $di->set('dispatcher', function() {
     return new Dispatcher;
-});
+}); 
+
+$di->set('session', $di->lazyNew('Aura\Session\Session'));
+ 
+$di->params['Aura\Session\CsrfTokenFactory']['randval'] = $di->lazyNew('Aura\Session\Randval');
+ 
+$di->params['Aura\Session\Session'] = array(
+    'segment_factory' => $di->lazyNew('Aura\Session\SegmentFactory'),
+    'csrf_token_factory' => $di->lazyNew('Aura\Session\CsrfTokenFactory'),
+    'cookies' => $_COOKIE,
+);
+ 
+$di->params['Aura\Session\Randval']['phpfunc'] = $di->lazyNew('Aura\Session\Phpfunc');
+ 
+$di->params['Aura\Session\Segment'] = array(
+    'session' => $di->lazyGet('session'),
+);

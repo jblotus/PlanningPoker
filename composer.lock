@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3c325599baf94feb3fb79a789eaece73",
+    "hash": "7f36559bfa251d967b31277d86b795b2",
     "packages": [
         {
             "name": "aura/di",
@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Di.git",
-                "reference": "5fd919e536c41122251a5026b9d7a148a92e1338"
+                "reference": "b1f1e51d301bdbf8a15fd5e4208966998d2cacc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/5fd919e536c41122251a5026b9d7a148a92e1338",
-                "reference": "5fd919e536c41122251a5026b9d7a148a92e1338",
+                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/b1f1e51d301bdbf8a15fd5e4208966998d2cacc8",
+                "reference": "b1f1e51d301bdbf8a15fd5e4208966998d2cacc8",
                 "shasum": ""
             },
             "require": {
@@ -34,10 +34,7 @@
             "autoload": {
                 "psr-4": {
                     "Aura\\Di\\": "src/"
-                },
-                "files": [
-                    "autoload.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -58,7 +55,7 @@
                 "di",
                 "di container"
             ],
-            "time": "2014-03-31 15:22:56"
+            "time": "2014-04-21 20:32:44"
         },
         {
             "name": "aura/router",
@@ -66,12 +63,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Router.git",
-                "reference": "91d5980b1bbcc7dd4a5b5b756102fc39bddb2d1f"
+                "reference": "7a623e4f59982449243a997725fe009778742849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Router/zipball/91d5980b1bbcc7dd4a5b5b756102fc39bddb2d1f",
-                "reference": "91d5980b1bbcc7dd4a5b5b756102fc39bddb2d1f",
+                "url": "https://api.github.com/repos/auraphp/Aura.Router/zipball/7a623e4f59982449243a997725fe009778742849",
+                "reference": "7a623e4f59982449243a997725fe009778742849",
                 "shasum": ""
             },
             "require": {
@@ -112,20 +109,76 @@
                 "router",
                 "routing"
             ],
-            "time": "2014-04-03 14:01:35"
+            "time": "2014-04-22 02:26:42"
         },
         {
-            "name": "aura/sql",
-            "version": "2.0.0",
+            "name": "aura/session",
+            "version": "dev-develop-2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/auraphp/Aura.Sql.git",
-                "reference": "504686d94f185991aea2119bc959a94b67bdee87"
+                "url": "https://github.com/auraphp/Aura.Session.git",
+                "reference": "f66fd14fd6a912e0ec1fcb7968e10e6fd7c42ed1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Sql/zipball/504686d94f185991aea2119bc959a94b67bdee87",
-                "reference": "504686d94f185991aea2119bc959a94b67bdee87",
+                "url": "https://api.github.com/repos/auraphp/Aura.Session/zipball/f66fd14fd6a912e0ec1fcb7968e10e6fd7c42ed1",
+                "reference": "f66fd14fd6a912e0ec1fcb7968e10e6fd7c42ed1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "suggest": {
+                "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens.",
+                "ext-openssl": "OpenSSL generates the best secure CSRF tokens."
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                },
+                "branch-alias": {
+                    "dev-develop-2": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Session\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Session Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Session/contributors"
+                }
+            ],
+            "description": "Provides session management functionality, including session segments, read-once (flash) values, CSRF tools, and lazy session starting.",
+            "homepage": "http://auraphp.github.com/Aura.Session",
+            "keywords": [
+                "csrf",
+                "flash",
+                "flash message",
+                "session",
+                "sessions"
+            ],
+            "time": "2014-04-18 20:43:52"
+        },
+        {
+            "name": "aura/sql",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Sql.git",
+                "reference": "92fefa64dcfb5c2acf168e5632d4af5746e3637e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Sql/zipball/92fefa64dcfb5c2acf168e5632d4af5746e3637e",
+                "reference": "92fefa64dcfb5c2acf168e5632d4af5746e3637e",
                 "shasum": ""
             },
             "require": {
@@ -165,7 +218,7 @@
                 "sqlserver",
                 "sqlsrv"
             ],
-            "time": "2014-04-01 15:17:32"
+            "time": "2014-04-08 14:17:53"
         },
         {
             "name": "aura/view",
@@ -173,12 +226,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.View.git",
-                "reference": "b7359d691351c6736fb704bf77a84aa8d9699306"
+                "reference": "3fe722051af83893cee4cace93131f695ef8e30a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.View/zipball/b7359d691351c6736fb704bf77a84aa8d9699306",
-                "reference": "b7359d691351c6736fb704bf77a84aa8d9699306",
+                "url": "https://api.github.com/repos/auraphp/Aura.View/zipball/3fe722051af83893cee4cace93131f695ef8e30a",
+                "reference": "3fe722051af83893cee4cace93131f695ef8e30a",
                 "shasum": ""
             },
             "require": {
@@ -187,7 +240,10 @@
             "type": "library",
             "extra": {
                 "aura": {
-                    "type": "library"
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\View\\_Config\\Common"
+                    }
                 },
                 "branch-alias": {
                     "dev-develop-2": "2.0.x-dev"
@@ -195,7 +251,8 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Aura\\View\\": "src/"
+                    "Aura\\View\\": "src/",
+                    "Aura\\View\\_Config\\": "config/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -218,7 +275,7 @@
                 "twostep view",
                 "view"
             ],
-            "time": "2014-03-15 15:18:13"
+            "time": "2014-04-18 20:55:57"
         },
         {
             "name": "aura/web",
@@ -226,12 +283,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/auraphp/Aura.Web.git",
-                "reference": "a3870d1a16ecd3ab6c4807165ac5196384da62cd"
+                "reference": "45d3121f4d881e267557a3ab669a565c0849f952"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/auraphp/Aura.Web/zipball/a3870d1a16ecd3ab6c4807165ac5196384da62cd",
-                "reference": "a3870d1a16ecd3ab6c4807165ac5196384da62cd",
+                "url": "https://api.github.com/repos/auraphp/Aura.Web/zipball/45d3121f4d881e267557a3ab669a565c0849f952",
+                "reference": "45d3121f4d881e267557a3ab669a565c0849f952",
                 "shasum": ""
             },
             "require": {
@@ -271,20 +328,20 @@
                 "request",
                 "response"
             ],
-            "time": "2014-04-01 20:12:34"
+            "time": "2014-04-18 21:02:40"
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "4.0.1",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "c1cf6c8630b71fa7c9b8f7e769758bb1d9147dae"
+                "reference": "40db53833aaea528347994acd4578d7b9b2211ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/c1cf6c8630b71fa7c9b8f7e769758bb1d9147dae",
-                "reference": "c1cf6c8630b71fa7c9b8f7e769758bb1d9147dae",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/40db53833aaea528347994acd4578d7b9b2211ee",
+                "reference": "40db53833aaea528347994acd4578d7b9b2211ee",
                 "shasum": ""
             },
             "require": {
@@ -332,7 +389,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-04-04 20:43:50"
+            "time": "2014-04-16 17:33:22"
         },
         {
             "name": "guzzlehttp/streams",
@@ -386,6 +443,33 @@
                 "stream"
             ],
             "time": "2014-04-03 04:48:24"
+        },
+        {
+            "name": "lightopenid/lightopenid",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://git.gitorious.org/lightopenid/lightopenid.git",
+                "reference": "9d42dc24e4dd34121c98a6491bc3ef7933a68a19"
+            },
+            "require": {
+                "php": ">=5.2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "homepage": "http://code.google.com/p/lightopenid/",
+            "keywords": [
+                "OpenId"
+            ],
+            "time": "2013-10-27 16:25:49"
         }
     ],
     "packages-dev": [
@@ -638,16 +722,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.0.14",
+            "version": "4.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a80b77d92a6c7723d77c6728b4ae37e92a65ac1d"
+                "reference": "8185f4bd21860cc72466009070a50bed6cd2eaca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a80b77d92a6c7723d77c6728b4ae37e92a65ac1d",
-                "reference": "a80b77d92a6c7723d77c6728b4ae37e92a65ac1d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8185f4bd21860cc72466009070a50bed6cd2eaca",
+                "reference": "8185f4bd21860cc72466009070a50bed6cd2eaca",
                 "shasum": ""
             },
             "require": {
@@ -709,20 +793,20 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-03-28 11:10:03"
+            "time": "2014-04-21 06:33:32"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "c5e6274b8f2bf983cf883bb375cf44f99aff200e"
+                "reference": "3697daa12ab57b2bfc27b734ab963142f27b9159"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/c5e6274b8f2bf983cf883bb375cf44f99aff200e",
-                "reference": "c5e6274b8f2bf983cf883bb375cf44f99aff200e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3697daa12ab57b2bfc27b734ab963142f27b9159",
+                "reference": "3697daa12ab57b2bfc27b734ab963142f27b9159",
                 "shasum": ""
             },
             "require": {
@@ -766,7 +850,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2014-03-18 08:56:48"
+            "time": "2014-04-16 14:50:10"
         },
         {
             "name": "raveren/kint",
@@ -1018,17 +1102,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.4.3",
+            "version": "v2.4.4",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd"
+                "reference": "65539ecde838f9c0d18b006b2101e3deb4b5c9ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd",
-                "reference": "77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/65539ecde838f9c0d18b006b2101e3deb4b5c9ff",
+                "reference": "65539ecde838f9c0d18b006b2101e3deb4b5c9ff",
                 "shasum": ""
             },
             "require": {
@@ -1063,7 +1147,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-12 18:29:58"
+            "time": "2014-04-18 20:37:09"
         }
     ],
     "aliases": [
@@ -1074,7 +1158,9 @@
         "aura/router": 20,
         "aura/web": 20,
         "aura/di": 20,
-        "aura/view": 20
+        "aura/view": 20,
+        "aura/session": 20,
+        "lightopenid/lightopenid": 20
     },
     "platform": [
 

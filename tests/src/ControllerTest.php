@@ -6,9 +6,10 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
 {      
     private $webFactory;
     private $view;
+    private $session;
     private $httpClient;
     private $controller;
-    private $mockWebResponse;
+    private $mockWebResponse;    
     private $response;
     
     private $anyResponseData;
@@ -32,6 +33,10 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('json'))
             ->getMock();
         
+        $this->session = $this->getMockBuilder('Aura\Session\Session')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
         $this->anyPivotalTrackerToken = 'fooa987a98sdufahsdf';
         $this->anyProjectId = 12345;
         $this->anyStoryId = 234566;
@@ -46,7 +51,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->httpClient, $this->response);
+        $this->controller = new Controller($this->view, $this->request, $this->session, $this->httpClient, $this->response);
         
         $this->setExpectedException('Exception', 'put PIVOTAL_TRACKER_API_TOKEN in ENV');
         
@@ -76,7 +81,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->method('json')
             ->will($this->returnValue($this->anyResponseData));
         
-        $this->controller = new Controller($this->view, $this->request, $this->httpClient, $this->response);
+        $this->controller = new Controller($this->view, $this->request, $this->session, $this->httpClient, $this->response);
          
         
         $actual = $this->controller->getPivotalStory();

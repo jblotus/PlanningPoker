@@ -1,7 +1,19 @@
+<?php 
+$templateData = $this->getData();
+?>
 <h1>Planning Poker</h1>
 <p>
   This is the app.
 </p>
+
+<?php
+  if ($templateData->showLoginLink) {
+    ?>
+    <a href="/login">click to login with gmail</a>
+    <?php
+  }
+?>
+
 
 <h3>Current Story</h3>
 <ul id="current-story"> 

@@ -31,6 +31,9 @@ class Router
         
         $this->router
             ->add('getPivotalStory', "/get_pivotal_story");
+        
+        $this->router
+            ->add('login', "/login");
     }
     
     private function getCurrentRoute()

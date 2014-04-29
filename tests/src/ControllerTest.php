@@ -93,6 +93,101 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $actual->content->get());
     }
     
+    public function testLoginRedirectsIfFreshConnection()
+    {
+        $this->webFactory = new \Aura\Web\WebFactory(array());
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+        
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+
+        $this->authService->expects($this->once())
+            ->method('isFreshConnection')            
+            ->will($this->returnValue(true));
+        
+        $this->authService->expects($this->once())
+            ->method('getAuthUrl')            
+            ->will($this->returnValue('http://foo.com'));
+        
+        $actual = $this->controller->login();
+        
+        $this->assertEquals(array('Location' => 'http://foo.com'), $actual->headers->get());
+    }
+    
+    public function testLoginReturnsCorrectResponseForIfIsCancelledThirdPartyLogin()
+    {
+        $this->webFactory = new \Aura\Web\WebFactory(array());
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+        
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+
+        $this->authService->expects($this->once())
+            ->method('isFreshConnection')            
+            ->will($this->returnValue(false));
+        
+        $this->authService->expects($this->once())
+            ->method('isCancelledThirdPartyLogin')            
+            ->will($this->returnValue(true));
+        
+        $actual = $this->controller->login();
+        
+        $this->assertEquals("User has canceled authentication!", $actual->content->get());
+    }
+    
+    public function testLoginLoadsUserIntoSessionAndRedirectsIfIsValidatedThirdPartyLogin()
+    {
+        $this->webFactory = new \Aura\Web\WebFactory(array());
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+        
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+
+        $this->authService->expects($this->once())
+            ->method('isFreshConnection')            
+            ->will($this->returnValue(false));
+        
+        $this->authService->expects($this->once())
+            ->method('isCancelledThirdPartyLogin')            
+            ->will($this->returnValue(false));        
+                
+        $this->authService->expects($this->once())
+            ->method('isValidatedThirdPartyLogin')            
+            ->will($this->returnValue(true));
+        
+        $this->authService->expects($this->once())
+            ->method('loadUserIntoSession');
+        
+        $actual = $this->controller->login();
+        
+        $this->assertEquals(array('Location' => '/'), $actual->headers->get());
+    }
+    
+    public function testLoginReturnsCorrectResponseForDefaultCase()
+    {
+        $this->webFactory = new \Aura\Web\WebFactory(array());
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+        
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+
+        $this->authService->expects($this->once())
+            ->method('isFreshConnection')            
+            ->will($this->returnValue(false));
+        
+        $this->authService->expects($this->once())
+            ->method('isCancelledThirdPartyLogin')            
+            ->will($this->returnValue(false));
+        
+        $this->authService->expects($this->once())
+            ->method('isValidatedThirdPartyLogin')            
+            ->will($this->returnValue(false));
+        
+        $actual = $this->controller->login();
+        
+        $this->assertEquals("The user has not logged in", $actual->content->get());
+    }
+    
     public function testGetPivotalStoryThrowsExceptionIfTokenMissing()
     {        
         $this->webFactory = new \Aura\Web\WebFactory(array());

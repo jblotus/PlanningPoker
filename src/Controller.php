@@ -71,7 +71,7 @@ class Controller
             return $this->response; 
         } 
         
-        if($this->authService->isValidatedThirdPartyLogin()) {
+        if ($this->authService->isValidatedThirdPartyLogin()) {
             $this->authService->loadUserIntoSession();            
             $this->response->redirect->to('/');
             return $this->response;

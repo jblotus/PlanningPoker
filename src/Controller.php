@@ -62,7 +62,7 @@ class Controller
     public function login()
     {
         if ($this->authService->isFreshConnection()) {
-            $this->response->redirect->to($openid->authUrl());
+            $this->response->redirect->to($this->authService->getAuthUrl());
             return $this->response; 
         }
         

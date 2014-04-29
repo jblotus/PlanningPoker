@@ -44,6 +44,11 @@ class AuthService
         $segment->email = $data['contact/email'];
         $this->session->commit(); 
     }
+    
+    public function getAuthUrl()
+    {
+        return $this->lightOpenId->authUrl();
+    }
   
     private function getUserSession()
     {

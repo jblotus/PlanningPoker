@@ -10,6 +10,7 @@ class AuthServiceTest extends \PHPUnit_Framework_TestCase
     
     private $anySegment;
     private $anyAttributes;
+    private $anyAuthUrl;
     
     public function setUp()
     {
@@ -20,7 +21,7 @@ class AuthServiceTest extends \PHPUnit_Framework_TestCase
         
         $this->lightOpenId = $this->getMockBuilder('LightOpenID')
             ->disableOriginalConstructor()
-            ->setMethods(array('validate', 'getAttributes', '__get'))
+            ->setMethods(array('validate', 'getAttributes', '__get', 'authUrl'))
             ->getMock();
         
         $this->anySegment = $this->getMockBuilder('Aura\Session\Segment')
@@ -28,6 +29,7 @@ class AuthServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         
         $this->anyAttributes = array('contact/email' => 'foo@bar.com');
+        $this->anyAuthUrl = 'http://foo.com';
         
         $this->authService = new AuthService($this->session, $this->lightOpenId);
     }
@@ -168,5 +170,14 @@ class AuthServiceTest extends \PHPUnit_Framework_TestCase
             ->method('commit');
         
         $this->authService->loadUserIntoSession();
-    }    
+    }
+    
+    public function testGetAuthUrlDoesIt()
+    {
+        $this->lightOpenId->expects($this->once())
+            ->method('authUrl')
+            ->will($this->returnValue($this->anyAuthUrl));
+        $actual = $this->authService->getAuthUrl();
+        $this->assertEquals($this->anyAuthUrl, $actual);
+    }
 }

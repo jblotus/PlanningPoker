@@ -5,31 +5,27 @@ namespace jblotus\PlanningPoker;
 use Aura\Web\Request;
 use GuzzleHttp\Client as PivotalService;
 use Aura\Web\Response;
-use Aura\Session\Session;
-use LightOpenID;
 
 class Controller
 {
     private $view;
     private $request;
-    private $session;
+    private $authService;
     private $pivotal;
     private $response;
     
-    public function __construct(View $view, Request $request, Session $session, PivotalService $pivotal, Response $response)
+    public function __construct(View $view, Request $request, AuthService $authService, PivotalService $pivotal, Response $response)
     {
         $this->view = $view;
         $this->request = $request;
-        $this->session = $session;
+        $this->authService = $authService;
         $this->pivotal = $pivotal;
         $this->response = $response;
     }  
     
     public function home()
     {
-        $this->authenticate();
-
-        $isLoggedIn = $this->isLoggedIn();
+        $isLoggedIn = $this->authService->isLoggedIn();
       
         $data = array('showLoginLink' => !$isLoggedIn);
 
@@ -65,30 +61,18 @@ class Controller
     
     public function login()
     {
-        //refactor this out before commit
-        $openid = new LightOpenId('planning-poker-91022.use1.nitrousbox.com:4000');
-
-        $openid->identity = 'https://www.google.com/accounts/o8/id';
-        $openid->required = array(
-          'namePerson/first',
-          'namePerson/last',
-          'contact/email',
-        );         
-        
-        if (!$openid->mode) {            
+        if ($this->authService->isFreshConnection()) {
             $this->response->redirect->to($openid->authUrl());
             return $this->response; 
-        }     
+        }
         
-        if ($openid->mode == 'cancel') {            
-            echo "User has canceled authentication!";
-        } else if($openid->validate() || $openid->mode === 'id_res') {
-
-            $data = $openid->getAttributes();            
-            $segment = $this->getUserSession();
-            $segment->email = $data['contact/email'];
-            $this->session->commit(); 
-            
+        if ($this->authService->isCancelledThirdPartyLogin()) {                        
+            $this->response->content->set("User has canceled authentication!");
+            return $this->response; 
+        } 
+        
+        if($this->authService->isValidatedThirdPartyLogin()) {
+            $this->authService->loadUserIntoSession();            
             $this->response->redirect->to('/');
             return $this->response;
         }
@@ -99,24 +83,9 @@ class Controller
     
     private function authenticate()
     {
-        //debug
-        //$this->session->destroy();        
-
-        $segment = $this->getUserSession();        
-        if (!$this->isLoggedIn()) {               
+        if (!$this->authService->isLoggedIn()) {
             $this->response->redirect->to('/login');            
             return $this->response;
         }
-    }
-    
-    private function isLoggedIn()
-    {
-        $segment = $this->getUserSession();
-        return !!$segment->email;
-    }
-    
-    private function getUserSession()
-    {
-        return $this->session->newSegment('user');
-    }
+    } 
 }

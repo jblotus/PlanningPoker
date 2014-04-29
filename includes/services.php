@@ -13,6 +13,7 @@ use GuzzleHttp\Client as HttpClient;
 use jblotus\PlanningPoker\View;
 use jblotus\PlanningPoker\Controller;
 use jblotus\PlanningPoker\Dispatcher;
+use jblotus\PlanningPoker\AuthService;
 
 $di = new Container(new Factory);
 $di->set('database', function() {
@@ -64,10 +65,10 @@ $di->set('pivotalService', function() use ($di) {
 $di->set('controller', function() use ($di) {
     $view = $di->get('view');
     $request = $di->get('request');
-    $session = $di->get('session');
+    $authService = $di->get('authservice');
     $pivotalService = $di->get('pivotalService');
     $response = $di->get('response');    
-    return new Controller($view, $request, $session, $pivotalService, $response);
+    return new Controller($view, $request, $authService, $pivotalService, $response);
 });
 
 $di->set('dispatcher', function() {
@@ -89,3 +90,19 @@ $di->params['Aura\Session\Randval']['phpfunc'] = $di->lazyNew('Aura\Session\Phpf
 $di->params['Aura\Session\Segment'] = array(
     'session' => $di->lazyGet('session'),
 );
+
+$di->set('lightopenid', function() use ($di) {
+    $lightOpenId = new LightOpenID('planning-poker-91022.use1.nitrousbox.com:4000');
+    
+    $lightOpenId->identity = 'https://www.google.com/accounts/o8/id';
+    $lightOpenId->required = array(
+        'namePerson/first',
+        'namePerson/last',
+        'contact/email',
+    );
+    return $lightOpenId;
+});
+
+$di->set('authservice', function() use ($di) {
+    return new AuthService($di->get('session'), $di->get('lightopenid'));
+});

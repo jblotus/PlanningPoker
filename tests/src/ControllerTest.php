@@ -6,7 +6,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
 {      
     private $webFactory;
     private $view;
-    private $session;
+    private $authService;
     private $httpClient;
     private $controller;
     private $mockWebResponse;    
@@ -21,7 +21,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $this->view = $this->getMockBuilder('jblotus\PlanningPoker\View')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods(array('render'))
             ->getMock();
         
         $this->httpClient = $this->getMockBuilder('GuzzleHttp\Client')
@@ -33,7 +33,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('json'))
             ->getMock();
         
-        $this->session = $this->getMockBuilder('Aura\Session\Session')
+        $this->authService = $this->getMockBuilder('jblotus\PlanningPoker\AuthService')
             ->disableOriginalConstructor()
             ->getMock();
         
@@ -45,13 +45,61 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->anyResponseData = array('foo');
     }
     
+    public function testHomeShowsLoginLinkIfNotLoggedIn()
+    {
+        $this->webFactory = new \Aura\Web\WebFactory(array());
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+        
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        
+        $this->view->expects($this->once())
+            ->method('render')
+            ->with(
+                array(
+                    'showLoginLink' => true    
+                ),
+                VIEW_ROOT . 'home.html.php'
+            )
+            ->will($this->returnValue('foo'));
+        
+        $actual = $this->controller->home();
+        $this->assertEquals('foo', $actual->content->get());
+    }
+    
+    public function testHomeDoesNotShowLoginLinkIfLoggedIn()
+    {
+        $this->webFactory = new \Aura\Web\WebFactory(array());
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+        
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        
+        $this->authService->expects($this->any())
+            ->method('isLoggedIn')
+            ->will($this->returnValue(true));
+        
+        $this->view->expects($this->once())
+            ->method('render')
+            ->with(
+                array(
+                    'showLoginLink' => false    
+                ),
+                VIEW_ROOT . 'home.html.php'
+            )
+            ->will($this->returnValue('foo'));
+        
+        $actual = $this->controller->home();
+        $this->assertEquals('foo', $actual->content->get());
+    }
+    
     public function testGetPivotalStoryThrowsExceptionIfTokenMissing()
     {        
         $this->webFactory = new \Aura\Web\WebFactory(array());
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->session, $this->httpClient, $this->response);
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
         
         $this->setExpectedException('Exception', 'put PIVOTAL_TRACKER_API_TOKEN in ENV');
         
@@ -81,8 +129,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->method('json')
             ->will($this->returnValue($this->anyResponseData));
         
-        $this->controller = new Controller($this->view, $this->request, $this->session, $this->httpClient, $this->response);
-         
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);         
         
         $actual = $this->controller->getPivotalStory();
         

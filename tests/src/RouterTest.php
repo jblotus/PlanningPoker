@@ -36,6 +36,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with('getPivotalStory', "/get_pivotal_story");
         
+        $this->internalRouter->expects($this->at(2))
+            ->method('add')
+            ->with('login', "/login");
+        
         $this->internalRouter->expects($this->atLeastOnce())
             ->method('match')
             ->with('/foo', $this->request->server->get());

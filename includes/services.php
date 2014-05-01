@@ -8,72 +8,73 @@ use Aura\Web\WebFactory;
 use Aura\View\Finder;
 use Aura\View\Helper;
 use Aura\View\Manager;
-use Aura\View\Template;
-use GuzzleHttp\Client as HttpClient;
+use Aura\View\Template; 
 use jblotus\PlanningPoker\View;
 use jblotus\PlanningPoker\Controller;
 use jblotus\PlanningPoker\Dispatcher;
 use jblotus\PlanningPoker\AuthService;
 
 $di = new Container(new Factory);
-$di->set('database', function() {
-    return new ExtendedPdo('mysql:host=localhost;dbname=pp', 'root', '');
-});
 
-$di->set('webfactory', function() {    
-     
-    return new WebFactory($GLOBALS);
-});
+$di->set('database', $di->lazyNew('Aura\Sql\ExtendedPdo'));
+$di->params['Aura\Sql\ExtendedPdo'] = array(
+    'dsn' => 'mysql:host=localhost;dbname=pp',
+    'username' => 'root',
+    'password' => null
+);
+
+$di->set('webFactory', $di->lazyNew('Aura\Web\WebFactory'));
+$di->params['Aura\Web\WebFactory'] = array('globals' => $GLOBALS);
 
 $di->set('response', function() use($di) {         
-    $webFactory = $di->get('webfactory');
+    $webFactory = $di->get('webFactory');
     return $webFactory->newResponse();
 });
 
 $di->set('request', function() use ($di) {
-    $webFactory = $di->get('webfactory');
+    $webFactory = $di->get('webFactory');
     return $webFactory->newRequest();
 });
 
-$di->set('router', function() use ($di) {            
-    $router = (new RouterFactory)->newInstance(); 
-    $request = $di->get('request');
-    $response = $di->get('response');
-    
-    return new jblotus\PlanningPoker\Router($router, $request, $response);
-});
+$di->set('router', $di->lazyNew('jblotus\PlanningPoker\Router'));
 
-$di->set('view', function() {
-    $viewManager = new Manager(
+$di->params['jblotus\PlanningPoker\Router'] = array(
+    'router' => (new RouterFactory)->newInstance(),
+    'request' => $di->lazyGet('request'),
+    'response' => $di->lazyGet('response')
+);
+
+$di->set('viewManager', function() {
+     return new Manager(
         new Template,   // template factory
         new Helper,     // bare-bones helper object
         new Finder,     // view-template finder
         new Finder      // layout-template finder
     );
-    $layoutTemplate = function () {
-        require_once VIEW_ROOT . '/layouts/default.html.php';       
-    };
-    
-    return new View($viewManager, $layoutTemplate);
 });
 
-$di->set('pivotalService', function() use ($di) {
-    $client = new HttpClient(); 
-    return $client;
-});
+$di->set('view', $di->lazyNew('jblotus\PlanningPoker\View'));
 
-$di->set('controller', function() use ($di) {
-    $view = $di->get('view');
-    $request = $di->get('request');
-    $authService = $di->get('authservice');
-    $pivotalService = $di->get('pivotalService');
-    $response = $di->get('response');    
-    return new Controller($view, $request, $authService, $pivotalService, $response);
-});
+$di->params['jblotus\PlanningPoker\View'] = array(
+    'viewManager' => $di->lazyGet('viewManager'),
+    'layoutTemplate' => function () {
+      require_once VIEW_ROOT . '/layouts/default.html.php';       
+    }
+);
 
-$di->set('dispatcher', function() {
-    return new Dispatcher;
-}); 
+$di->set('pivotalService', $di->lazyNew('GuzzleHttp\Client'));
+
+
+$di->set('controller', $di->lazyNew('jblotus\PlanningPoker\Controller'));
+$di->params['jblotus\PlanningPoker\Controller'] = array(
+    'view' => $di->lazyGet('view'),
+    'request' => $di->lazyGet('request'),
+    'authService' => $di->lazyGet('authService'),
+    'pivotal' => $di->lazyGet('pivotalService'),
+    'response' => $di->lazyGet('response')
+);
+
+$di->set('dispatcher', $di->lazyNew('jblotus\PlanningPoker\Dispatcher')); 
 
 $di->set('session', $di->lazyNew('Aura\Session\Session'));
  
@@ -101,8 +102,10 @@ $di->set('lightopenid', function() use ($di) {
         'contact/email',
     );
     return $lightOpenId;
-});
+}); 
 
-$di->set('authservice', function() use ($di) {
-    return new AuthService($di->get('session'), $di->get('lightopenid'));
-});
+$di->set('authService', $di->lazyNew('jblotus\PlanningPoker\AuthService'));
+$di->params['jblotus\PlanningPoker\AuthService'] = array(
+    'session' => $di->lazyGet('session'),
+    'lightOpenId' => $di->lazyGet('lightopenid')
+);

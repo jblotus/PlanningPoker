@@ -1,10 +1,35 @@
 window.App = window.App || {};
-(function(App, $, _, Backbone, Handlebars, Pusher) {  
+(function(App, $, _, Backbone, Handlebars, Pusher) { 
   "use strict";
   
   App.onAjaxError = function() {
     window.alert('The was a problem communicating with the server.');
   };
+  
+  App.CurrentVoteModel = Backbone.Model.extend({
+    defaults: {
+      selected: 'abstain'
+    }
+  });
+  App.VotingButtonsView = Backbone.View.extend({
+    el: '#voting-buttons',
+    events: {
+      'click button' : 'handleVoteClick'
+    },
+    initialize: function() {
+      this.listenTo(this.model, 'change:selected', this.render);
+    },
+    handleVoteClick: function(e) {
+      this.model.set('selected', $(e.currentTarget).val(), 10);
+    },
+    render: function() {
+      var selected = this.model.get('selected');
+      
+      this.$el.find('button').removeClass('active');
+      this.$el.find('button[value=' + selected + ']').addClass('active');      
+      return this;
+    }
+  });
   
   App.Story = Backbone.Model.extend({
     url: function() {
@@ -68,6 +93,13 @@ window.App = window.App || {};
     });    
     
     App.storyInputView.render();
+    
+    App.currentVoteModel = new App.CurrentVoteModel();
+    
+    App.votingButtonsView = new App.VotingButtonsView({
+      model: App.currentVoteModel
+    });
+    App.votingButtonsView.render();
     
     //temporary autofill
     $('#pivotalProject').val(395571);

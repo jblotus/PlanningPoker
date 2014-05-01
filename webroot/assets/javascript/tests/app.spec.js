@@ -12,6 +12,53 @@ describe('the planning poker app', function() {
     });
   });
   
+  describe('the current vote model', function() {
+    var currentVoteModel;
+    beforeEach(function() {
+      currentVoteModel = new App.CurrentVoteModel();
+    });
+    it('should default selected attribute to "abstain"', function() {
+      expect(currentVoteModel.get('selected')).toBe('abstain');
+    });
+  });
+  
+  describe('the pusherapp events connector', function() {
+    it('should listen to change events on the current vote model and send them out the channel');
+    it('should change the current vote model when an event comes in from the channel');
+  });
+  
+  describe('the voting buttons view', function() {
+    var $rootElement,
+        votingButtonsView,
+        model;
+    
+    beforeEach(function() {
+      $rootElement = $('<div id="voting-buttons"><button value="abstain">abstain</button><button value="3">3</button></div>');
+      model = new App.CurrentVoteModel();
+      votingButtonsView = new App.VotingButtonsView({
+        el: $rootElement,
+        model: model
+      });
+    });
+    it('should bind to #voting-buttons by default', function() {
+      expect(App.VotingButtonsView.prototype.el).toBe('#voting-buttons');
+    });
+    it('should update the current vote model with the users vote', function() {
+      expect(model.get('selected')).toBe('abstain');
+      $rootElement.find('button[value=3]').click();
+      expect(model.get('selected')).toBe("3");
+      $rootElement.find('button[value=abstain]').click();
+      expect(model.get('selected')).toBe("abstain");
+    });
+    it('should make sure the correct button is active/highlighted when the vote changes', function() {
+      votingButtonsView.render();
+      expect($rootElement.find('button[value=abstain]').hasClass('active')).toBeTruthy();
+      model.set('selected', 3);
+      expect($rootElement.find('button[value=abstain]').hasClass('active')).not.toBeTruthy();
+      expect($rootElement.find('button[value=3]').hasClass('active')).toBeTruthy();
+    });
+  });
+  
   describe('the story model', function() {
     var story;
     beforeEach(function() {

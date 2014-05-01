@@ -108,7 +108,8 @@ window.App = window.App || {};
     //real time stuff
     App.pusher = new Pusher('7f733af21d17ca5e5083');
     App.Channels = {
-      current_story: App.pusher.subscribe('current-story')
+      current_story: App.pusher.subscribe('current-story'),
+      current_vote: App.pusher.subscribe('current-vote')
     }
     
     App.Channels.current_story.bind('loaded-current-story', function(data) {      
@@ -119,6 +120,10 @@ window.App = window.App || {};
         },
         error: App.onAjaxError
       });
+    });
+    
+    App.Channels.current_vote.bind('current client changed vote', function(data) {      
+      App.currentVoteModel.set('selected', data.vote);
     });
   });
 }(window.App, window.jQuery, window._, window.Backbone, window.Handlebars, window.Pusher));

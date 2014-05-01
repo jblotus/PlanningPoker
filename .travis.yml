@@ -4,7 +4,10 @@ php:
   - 5.4
   - hhvm
 before_script:
+  - npm install karma
   - composer install
-  - cd tests
-script: phpunit
+script:
+  - phpunit tests
+  - karma start --single-run --browsers PhantomJS karma.conf.js
+
 

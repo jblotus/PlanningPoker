@@ -60,7 +60,8 @@ describe('the planning poker app', function() {
         data: {
           project_id: '123',
           story_id: '456'
-        } 
+        },
+        error: App.onAjaxError
       });
     });
   });

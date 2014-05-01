@@ -5,6 +5,7 @@ namespace jblotus\PlanningPoker;
 use Aura\Web\Request;
 use GuzzleHttp\Client as PivotalService;
 use Aura\Web\Response;
+use Exception;
 
 class Controller
 {
@@ -47,15 +48,25 @@ class Controller
         
         $projectId = $this->request->query->get('project_id');
         $storyId = $this->request->query->get('story_id');
-        $endpoint = sprintf('https://www.pivotaltracker.com/services/v5/projects/%s/stories/%s', $projectId, $storyId );
+        
          
-        $response = $this->pivotal->get($endpoint, array(
-            'headers' => array('X-TrackerToken' => $token)
-        ));
-
-        $this->response->content->setType('application/json');
-        $json = json_encode($response->json());
-        $this->response->content->set($json);
+        try {
+            $endpoint = sprintf('https://www.pivotaltracker.com/services/v5/projects/%s/stories/%s', $projectId, $storyId );
+            $response = $this->pivotal->get($endpoint, array(
+                'headers' => array('X-TrackerToken' => $token)
+            ));
+                        
+            $json = json_encode($response->json());
+            $this->response->content->setType('application/json');
+            
+            $this->response->content->set($json);
+            
+        } catch (Exception $ex) {
+            $this->response->status->setCode(500);
+            $this->response->status->setPhrase($ex->getMessage());
+            $this->response->content->set($ex->getMessage());
+        }
+        
         return $this->response;
     }
     

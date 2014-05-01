@@ -232,4 +232,31 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(json_encode($this->anyResponseData), $this->response->content->get());
         $this->assertEquals('application/json', $this->response->content->getType());
     }
+  
+  public function testGetPivotalReturns500ErrorOnHttpClientException()
+    {        
+        $this->webFactory = new \Aura\Web\WebFactory(array(
+            '_ENV' => array(
+                'PIVOTAL_TRACKER_API_TOKEN' => $this->anyPivotalTrackerToken
+            ),
+            '_GET' => array(
+                'project_id' => $this->anyProjectId,
+                'story_id' => $this->anyStoryId
+            )
+        ));
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+    
+        $this->httpClient->expects($this->once())
+            ->method('get')
+            ->will($this->throwException(new \Exception('something bad happened', 404)));
+        
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);        
+        
+        $actual = $this->controller->getPivotalStory();
+        
+        $this->assertEquals(500, $actual->status->getCode());
+        $this->assertEquals('something bad happened', $actual->status->getPhrase());
+        $this->assertEquals('something bad happened', $this->response->content->get()); 
+    }
 }

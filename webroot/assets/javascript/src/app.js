@@ -1,6 +1,10 @@
 window.App = window.App || {};
 (function(App, $, _, Backbone, Handlebars, Pusher) {  
-  "use strict";  
+  "use strict";
+  
+  App.onAjaxError = function() {
+    window.alert('The was a problem communicating with the server.');
+  };
   
   App.Story = Backbone.Model.extend({
     url: function() {
@@ -38,7 +42,8 @@ window.App = window.App || {};
         data: {
           project_id: projectId,
           story_id: storyId
-        }
+        },
+        error: App.onAjaxError
       });
     },
     render: function() {
@@ -79,7 +84,8 @@ window.App = window.App || {};
         data: {
           project_id: data.project_id,
           story_id: data.story_id
-        }
+        },
+        error: App.onAjaxError
       });
     });
   });

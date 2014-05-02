@@ -6,6 +6,6 @@ php:
 before_script:
   - composer install
 script:
-  - ./vendor/bin/phpunit --bootstrap ./tests/bootstrap.php ./tests/src
+  - /home/travis/build/jblotus/PlanningPoker/vendor/bin/phpunit --bootstrap /home/travis/build/jblotus/PlanningPoker/tests/bootstrap.php /home/travis/build/jblotus/PlanningPoker/tests/src
 
 

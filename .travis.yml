@@ -7,7 +7,7 @@ before_script:
   - npm install karma
   - composer install
 script:
-  - phpunit tests
-  - karma start --single-run --browsers PhantomJS karma.conf.js
+  - ./vendor/bin/phpunit tests
+  - ./node_modules/.bin/karma start --single-run --browsers PhantomJS karma.conf.js
 
 

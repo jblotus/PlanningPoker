@@ -10,11 +10,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     
     private $anyData;
     private $anyRenderedContent;
+    private $anyPath;
     
     public function setUp()
-    {
+    { 
         $this->anyData = array('foo' => 'bar');
         $this->anyRenderedContent = 'foo';
+        $this->anyPath = 'foopath';
         
         $this->viewManager = $this->getMockBuilder('Aura\View\Manager')
             ->disableOriginalConstructor()

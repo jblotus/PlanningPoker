@@ -4,9 +4,9 @@ php:
   - 5.4
 before_script:
   - composer install
-  - npm install karma karma-jasmine
+  - npm install -g karma karma-jasmine
 script:
-  - /home/travis/build/jblotus/PlanningPoker/node_modules/.bin/karma start --single-run --browsers PhantomJS /home/travis/build/jblotus/PlanningPoker/karma.conf.js
+  - karma start --single-run --browsers PhantomJS /home/travis/build/jblotus/PlanningPoker/karma.conf.js
   - /home/travis/build/jblotus/PlanningPoker/vendor/bin/phpunit --bootstrap /home/travis/build/jblotus/PlanningPoker/tests/bootstrap.php /home/travis/build/jblotus/PlanningPoker/tests/src
 
 

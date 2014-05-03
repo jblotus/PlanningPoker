@@ -6,6 +6,7 @@ before_script:
   - composer install
   - npm install karma
   - npm install karma-jasmine
+  - npm install karma-phantomjs-launcher
   - npm install -g bower
   - bower install
 script:

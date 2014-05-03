@@ -5,6 +5,8 @@ php:
 before_script:
   - composer install
   - npm install karma
+  - npm install -g bower
+  - bower install
 script:
   - ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS /home/travis/build/jblotus/PlanningPoker/karma.conf.js
   - /home/travis/build/jblotus/PlanningPoker/vendor/bin/phpunit --bootstrap /home/travis/build/jblotus/PlanningPoker/tests/bootstrap.php /home/travis/build/jblotus/PlanningPoker/tests/src

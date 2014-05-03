@@ -5,6 +5,7 @@ php:
 before_script:
   - composer install
   - npm install karma
+  - npm install karma-jasmine
   - npm install -g bower
   - bower install
 script:

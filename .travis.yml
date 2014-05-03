@@ -6,7 +6,7 @@ before_script:
   - composer install
   - npm install
 script:
-  - /home/travis/build/jblotus/PlanningPoker/node_modules/.bin/karma start --single-run --browsers PhantomJS
+  - /home/travis/build/jblotus/PlanningPoker/node_modules/.bin/karma start --single-run --browsers PhantomJS /home/travis/build/jblotus/PlanningPoker/karma.conf.js
   - /home/travis/build/jblotus/PlanningPoker/vendor/bin/phpunit --bootstrap /home/travis/build/jblotus/PlanningPoker/tests/bootstrap.php /home/travis/build/jblotus/PlanningPoker/tests/src
 
 

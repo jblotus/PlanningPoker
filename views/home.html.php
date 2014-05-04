@@ -19,15 +19,17 @@ $templateData = $this->getData();
 <ul id="current-story"> 
 </ul>
 
-<div id="voting-buttons" class="btn-group">
+
+<script type="text/x-handlebars" id="voting-buttons-view-template">  
+
   <button type="button" class="btn btn-default" value="0">0</button>
   <button type="button" class="btn btn-default" value="1">1</button>
   <button type="button" class="btn btn-default" value="2">2</button>
   <button type="button" class="btn btn-default" value="3">3</button>
   <button type="button" class="btn btn-default" value="5">5</button>
   <button type="button" class="btn btn-default" value="8">8</button>
-  <button type="button" class="btn btn-default" value="abstain">Abstain</button>
-</div>
+  <button type="button" class="btn btn-default" value="abstain">Abstain</button> 
+</script>
 
 <form role="form" id="pivotal-story-loader">
   <div class="form-group">

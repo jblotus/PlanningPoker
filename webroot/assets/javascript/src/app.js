@@ -11,8 +11,8 @@ window.App = window.App || {};
       selected: 'abstain'
     }
   });
-  App.VotingButtonsView = Backbone.View.extend({
-    el: '#voting-buttons',
+  App.VotingButtonsView = Backbone.View.extend({ 
+    className: 'voting-buttons btn-grp',
     events: {
       'click button' : 'handleVoteClick'
     },
@@ -20,13 +20,23 @@ window.App = window.App || {};
       this.listenTo(this.model, 'change:selected', this.render);
     },
     handleVoteClick: function(e) {
-      this.model.set('selected', $(e.currentTarget).val(), 10);
+      var selected = parseInt($(e.currentTarget).val(), 10) || 'abstain';
+      this.model.set('selected', selected);
+        $.post('/pusher', {
+            event: 'changed-vote',
+            channel: 'current-vote',
+            event_data: {
+                'selected' : selected
+            }
+        });
     },
     render: function() {
-      var selected = this.model.get('selected');
+      var selected = this.model.get('selected'); 
+      this.$el.html(this.template()); 
       
       this.$el.find('button').removeClass('active');
-      this.$el.find('button[value=' + selected + ']').addClass('active');      
+      this.$el.find('button[value=' + selected + ']').addClass('active');
+      this.$el.appendTo($('body'));
       return this;
     }
   });
@@ -81,6 +91,10 @@ window.App = window.App || {};
     //set up templates here since they are on the dom
     App.storyViewTemplate = Handlebars.compile($('#story-view-template').html() || '');
     App.CurrentStoryView.prototype.template = App.storyViewTemplate;
+    
+    
+    App.votingButtonsViewTemplate = Handlebars.compile($('#voting-buttons-view-template').html() || '');
+    App.VotingButtonsView.prototype.template = App.votingButtonsViewTemplate;
             
     App.currentStoryModel = new App.Story();
     
@@ -108,9 +122,19 @@ window.App = window.App || {};
     //real time stuff
     App.pusher = new Pusher('7f733af21d17ca5e5083');
     App.Channels = {
+      everything: App.pusher.subscribe('everything'),
+      connections: App.pusher.subscribe('connections'),
       current_story: App.pusher.subscribe('current-story'),
       current_vote: App.pusher.subscribe('current-vote')
     }
+    
+    App.Channels.everything.bind('something', function(data) {      
+      console.log(data, 'triggered by php');
+    });
+    
+    App.Channels.connections.bind('someone-connected', function() {
+      console.log('someone connected');
+    });
     
     App.Channels.current_story.bind('loaded-current-story', function(data) {      
       App.currentStoryModel.fetch({
@@ -122,8 +146,9 @@ window.App = window.App || {};
       });
     });
     
-    App.Channels.current_vote.bind('current client changed vote', function(data) {      
-      App.currentVoteModel.set('selected', data.vote);
+    App.Channels.current_vote.bind('changed-vote', function(data) {
+      console.log('someone changed vote', data);
+      App.currentVoteModel.set('selected', data.selected);
     });
   });
 }(window.App, window.jQuery, window._, window.Backbone, window.Handlebars, window.Pusher));

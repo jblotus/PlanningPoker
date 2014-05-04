@@ -36,7 +36,7 @@ window.App = window.App || {};
       
       this.$el.find('button').removeClass('active');
       this.$el.find('button[value=' + selected + ']').addClass('active');
-      this.$el.appendTo($('body'));
+      this.$el.appendTo($('#my-cards'));
       return this;
     }
   });

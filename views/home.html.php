@@ -14,11 +14,59 @@ $templateData = $this->getData();
   }
 ?>
 
+<div id="main">
+  <div class="row">
+    <div class="col-md-2">
+      <h4>Connected Users</h4>
+      <ul id="connected-users">
+      </ul>
+    </div>
+    
+    <div class="col-md-6">
+      <h3>Current Story</h3>
+      <ul id="current-story"></ul>
+      
+      <form role="form" id="pivotal-story-loader">
+        <div class="form-group">
+          <label for="pivotalProject">Pivotal Tracker Project ID</label>
+          <input type="input" class="form-control" id="pivotalProject" name="project_id" placeholder="Enter Project #">
+        </div>
+        <div class="form-group">
+          <label for="pivotalStoryNumber">Pivotal Tracker Story ID</label>
+          <input type="input" class="form-control" id="pivotalStoryNumber" name="story_id" placeholder="Enter Story #">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>   
+    </div>
+ 
+  </div>
 
+  <div class="row top-buffer">
+    <div class="col-md-2">
+    
+    </div>
+    
+    <div id="my-cards" class="col-md-6">
+      <h4>My Cards</h4>
+    </div>
+    
 
-<h3>Current Story</h3>
-<ul id="current-story"> 
-</ul>
+  </div>
+
+  <div class="row top-buffer">
+    <div class="col-md-2">
+      
+    </div>
+    <div class="btn-grp col-md-6">
+      <button type="button" class="btn btn-info" value="cast">Finished Voting</button>
+    </div>
+  </div>
+  
+  <div class="top-buffer row">
+    
+  </div>
+  
+</div>
 
 
 <script type="text/x-handlebars" id="voting-buttons-view-template">  
@@ -32,25 +80,6 @@ $templateData = $this->getData();
   <button type="button" class="btn btn-default" value="abstain">Abstain</button>   
 </script>
 
-<form role="form" id="pivotal-story-loader">
-  <div class="form-group">
-    <label for="pivotalProject">Pivotal Tracker Project ID</label>
-    <input type="input" class="form-control" id="pivotalProject" name="project_id" placeholder="Enter Project #">
-  </div>
-  <div class="form-group">
-    <label for="pivotalStoryNumber">Pivotal Tracker Story ID</label>
-    <input type="input" class="form-control" id="pivotalStoryNumber" name="story_id" placeholder="Enter Story #">
-  </div>
-  <button type="submit" class="btn btn-default">Submit</button>
-</form>
-
-<h4>Connected Users</h4>
-<ul id="connected-users">
-</ul>
-
-<div class="btn-grp">
-  <button type="button" class="btn btn-info" value="cast">Finished Voting</button>
-</div>
 
 <script type="text/x-handlebars" id="story-view-template">  
     <li>Story Name: {{name}}</li>

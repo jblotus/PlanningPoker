@@ -27,7 +27,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     }
     
     public function testInitializeDoesIt()
-    {        
+    { 
         $this->internalRouter->expects($this->at(0))
             ->method('add')
             ->with('home', "/");
@@ -40,11 +40,14 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with('login', "/login");
         
+        $this->internalRouter->expects($this->at(3))
+            ->method('add')
+            ->with('triggerPusherEvent', "/pusher");
+        
         $this->internalRouter->expects($this->atLeastOnce())
             ->method('match')
             ->with('/foo', $this->request->server->get());
         
-        $actual = $this->router->initialize();
-        
-    }
+        $actual = $this->router->initialize();         
+    }    
 }

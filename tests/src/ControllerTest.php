@@ -11,11 +11,16 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     private $controller;
     private $mockWebResponse;    
     private $response;
+    private $pusher;
     
     private $anyResponseData;
     private $anyPivotalTrackerToken;
     private $anyProjectId;
     private $anyStoryId;
+    
+    private $anyEventName;
+    private $anyChannelName;
+    private $anyEventData;
     
     public function setUp()
     {
@@ -37,10 +42,18 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         
+        $this->pusher = $this->getMockBuilder('jblotus\PlanningPoker\PusherService')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
         $this->anyPivotalTrackerToken = 'fooa987a98sdufahsdf';
         $this->anyProjectId = 12345;
         $this->anyStoryId = 234566;
         $this->pivotalStoryEndpoint = 'https://www.pivotaltracker.com/services/v5/projects/' . $this->anyProjectId . '/stories/' . $this->anyStoryId;
+        
+        $this->anyEvent = 'foo';
+        $this->anyChannel = 'somechannel';
+        $this->anyEventData = array('foo' => 'bar');
         
         $this->anyResponseData = array('foo');
     }
@@ -51,7 +64,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        $this->buildTestObj();
         
         $this->view->expects($this->once())
             ->method('render')
@@ -67,13 +80,18 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $actual->content->get());
     }
     
+    private function buildTestObj()
+    {
+        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response, $this->pusher);
+    }
+    
     public function testHomeDoesNotShowLoginLinkIfLoggedIn()
     {
         $this->webFactory = new \Aura\Web\WebFactory(array());
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        $this->buildTestObj();        
         
         $this->authService->expects($this->any())
             ->method('isLoggedIn')
@@ -99,7 +117,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        $this->buildTestObj();
 
         $this->authService->expects($this->once())
             ->method('isFreshConnection')            
@@ -120,7 +138,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        $this->buildTestObj();
 
         $this->authService->expects($this->once())
             ->method('isFreshConnection')            
@@ -141,7 +159,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        $this->buildTestObj();
 
         $this->authService->expects($this->once())
             ->method('isFreshConnection')            
@@ -169,7 +187,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        $this->buildTestObj();
 
         $this->authService->expects($this->once())
             ->method('isFreshConnection')            
@@ -194,7 +212,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->webFactory->newRequest();
         $this->response = $this->webFactory->newResponse();
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);
+        $this->buildTestObj();
         
         $this->setExpectedException('Exception', 'put PIVOTAL_TRACKER_API_TOKEN in ENV');
         
@@ -224,7 +242,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->method('json')
             ->will($this->returnValue($this->anyResponseData));
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);         
+        $this->buildTestObj();      
         
         $actual = $this->controller->getPivotalStory();
         
@@ -251,12 +269,60 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->throwException(new \Exception('something bad happened', 404)));
         
-        $this->controller = new Controller($this->view, $this->request, $this->authService, $this->httpClient, $this->response);        
+        $this->buildTestObj();      
         
         $actual = $this->controller->getPivotalStory();
         
         $this->assertEquals(500, $actual->status->getCode());
         $this->assertEquals('something bad happened', $actual->status->getPhrase());
         $this->assertEquals('something bad happened', $this->response->content->get()); 
+    }
+    
+    public function testTriggerPusherEventReturns200IfEventSent()
+    {        
+        $this->webFactory = new \Aura\Web\WebFactory(array(
+            '_POST' => array(
+                'event' => $this->anyEventName,
+                'channel' => $this->anyChannelName,
+                'event_data' => $this->anyEventData
+            )
+        ));
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+    
+        $this->pusher->expects($this->once())
+            ->method('trigger')
+            ->with($this->anyEventName, $this->anyChannelName, $this->anyEventData)
+            ->will($this->returnValue(true));
+        
+        $this->buildTestObj();      
+        
+        $actual = $this->controller->triggerPusherEvent();
+        
+        $this->assertEquals(200, $actual->status->getCode());
+    }
+    
+    public function testTriggerPusherEventReturns500IfEventFailed()
+    {        
+        $this->webFactory = new \Aura\Web\WebFactory(array(
+            '_POST' => array(
+                'event' => $this->anyEventName,
+                'channel' => $this->anyChannelName,
+                'event_data' => $this->anyEventData
+            )
+        ));
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+    
+        $this->pusher->expects($this->once())
+            ->method('trigger')
+            ->with($this->anyEventName, $this->anyChannelName, $this->anyEventData)
+            ->will($this->returnValue(false));
+        
+        $this->buildTestObj();      
+        
+        $actual = $this->controller->triggerPusherEvent();
+        
+        $this->assertEquals(500, $actual->status->getCode());
     }
 }

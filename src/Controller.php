@@ -14,14 +14,16 @@ class Controller
     private $authService;
     private $pivotal;
     private $response;
+    private $pusher;
     
-    public function __construct(View $view, Request $request, AuthService $authService, PivotalService $pivotal, Response $response)
+    public function __construct(View $view, Request $request, AuthService $authService, PivotalService $pivotal, Response $response, PusherService $pusher)
     {
         $this->view = $view;
         $this->request = $request;
         $this->authService = $authService;
         $this->pivotal = $pivotal;
         $this->response = $response;
+        $this->pusher = $pusher;
     }  
     
     public function home()
@@ -90,7 +92,24 @@ class Controller
         
         $this->response->content->set("The user has not logged in");
         return $this->response;                
-    }    
+    }
+    
+    public function triggerPusherEvent()
+    {
+        $post = $this->request->post;
+        $channel = $post->get('channel');
+        $event = $post->get('event');
+        $eventData = $post->get('event_data');
+        $results = $this->pusher->trigger($channel, $event, $eventData);
+        
+        if ($results) {
+            $this->response->status->setCode('200');
+        } else {
+            $this->response->status->setCode('500');
+        }
+        
+        return $this->response;
+    }
     
     private function authenticate()
     {

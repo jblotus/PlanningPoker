@@ -34,6 +34,9 @@ class Router
         
         $this->router
             ->add('login', "/login");
+        
+        $this->router
+            ->add('triggerPusherEvent', "/pusher");
     }
     
     private function getCurrentRoute()

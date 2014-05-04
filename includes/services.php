@@ -13,6 +13,7 @@ use jblotus\PlanningPoker\View;
 use jblotus\PlanningPoker\Controller;
 use jblotus\PlanningPoker\Dispatcher;
 use jblotus\PlanningPoker\AuthService;
+use jblotus\PlanningPoker\PusherService;
 
 $di = new Container(new Factory);
 
@@ -62,8 +63,25 @@ $di->params['jblotus\PlanningPoker\View'] = array(
     }
 );
 
+$di->set('pusherLib', function() use ($di) {
+    $request = $di->get('request');
+    $env = $request->env;    
+    $appKey = $env->get('PUSHER_APP_KEY');
+    $appSecret = $env->get('PUSHER_APP_SECRET');    
+    $appId = $env->get('PUSHER_APP_ID');
+    //$debug = true;
+    $debug = false;
+    $pusher = new Pusher($appKey, $appSecret, $appId, $debug);
+    
+    return $pusher;
+});
+
 $di->set('pivotalService', $di->lazyNew('GuzzleHttp\Client'));
 
+$di->set('pusherService', $di->lazyNew('jblotus\PlanningPoker\PusherService'));
+$di->params['jblotus\PlanningPoker\PusherService'] = array(
+    'pusher' => $di->lazyGet('pusherLib')
+);
 
 $di->set('controller', $di->lazyNew('jblotus\PlanningPoker\Controller'));
 $di->params['jblotus\PlanningPoker\Controller'] = array(
@@ -71,7 +89,8 @@ $di->params['jblotus\PlanningPoker\Controller'] = array(
     'request' => $di->lazyGet('request'),
     'authService' => $di->lazyGet('authService'),
     'pivotal' => $di->lazyGet('pivotalService'),
-    'response' => $di->lazyGet('response')
+    'response' => $di->lazyGet('response'),
+    'pusher' => $di->lazyGet('pusherService')
 );
 
 $di->set('dispatcher', $di->lazyNew('jblotus\PlanningPoker\Dispatcher')); 

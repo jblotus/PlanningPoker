@@ -17,4 +17,9 @@ class PusherService
     {
         return $this->pusher->trigger($channel, $event, $data);
     }
+    
+    public function authorizePresence($channel, $socketId, $userId, array $customData)
+    {
+        return $this->pusher->presence_auth($channel, $socketId, $userId, $customData);
+    }
 }

@@ -25,18 +25,24 @@ class Router
     }
     
     private function defineRoutes()
-    {
+    {        
         $this->router
-            ->add('home', "/");
+            ->add('getPivotalStory', "/backend/get_pivotal_story");
         
         $this->router
-            ->add('getPivotalStory', "/get_pivotal_story");
+            ->add('login', "/backend/login");
         
         $this->router
-            ->add('login', "/login");
-        
+            ->add('triggerPusherEvent', "/backend/pusher");
+      
         $this->router
-            ->add('triggerPusherEvent', "/pusher");
+            ->add('authorizePusher', "/backend/authpusher");
+      
+        $this->router
+          ->add('home', "{any}")    
+          ->addTokens(array(
+            'any' => '\/(?!backend).+|\/', //need to be able to match backbone urls not prefixed with /backend
+          ));
     }
     
     private function getCurrentRoute()

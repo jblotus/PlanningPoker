@@ -21,6 +21,9 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     private $anyEventName;
     private $anyChannelName;
     private $anyEventData;
+    private $anySocketId;
+    
+    private $anyUserEmail;
     
     public function setUp()
     {
@@ -53,7 +56,10 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         
         $this->anyEvent = 'foo';
         $this->anyChannel = 'somechannel';
-        $this->anyEventData = array('foo' => 'bar');
+        $this->anyEventData = array('foo' => 'bar');        
+        $this->anySocketId = rand();
+        
+        $this->anyUserEmail = 'foo@bar.com';
         
         $this->anyResponseData = array('foo');
     }
@@ -278,12 +284,65 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('something bad happened', $this->response->content->get()); 
     }
     
-    public function testTriggerPusherEventReturns200IfEventSent()
+    public function testAuthorizePusherReturns403IfNotLoggedIn()
+    {        
+        $this->webFactory = new \Aura\Web\WebFactory(array());
+        
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+    
+        $this->authService->expects($this->once())
+            ->method('isLoggedIn')
+            ->will($this->returnValue(false));
+        
+        $this->buildTestObj();
+        
+        $actual = $this->controller->authorizePusher();
+        
+        $this->assertEquals(403, $actual->status->getCode());
+    }
+    
+    public function testAuthorizePusherAuthorizesAndReturnsInfo()
     {        
         $this->webFactory = new \Aura\Web\WebFactory(array(
             '_POST' => array(
-                'event' => $this->anyEventName,
-                'channel' => $this->anyChannelName,
+                'channel_name' => $this->anyChannel,
+                'socket_id' => $this->anySocketId
+            )
+        ));
+        
+        $this->request = $this->webFactory->newRequest();
+        $this->response = $this->webFactory->newResponse();
+    
+        $this->authService->expects($this->once())
+            ->method('isLoggedIn')
+            ->will($this->returnValue(true));
+        
+        
+        $this->authService->expects($this->once())
+            ->method('getUserEmail')
+            ->will($this->returnValue($this->anyUserEmail));
+        
+        $this->pusher->expects($this->once())
+            ->method('authorizePresence')
+            ->with($this->anyChannel, $this->anySocketId, $this->anyUserEmail, array())
+            ->will($this->returnValue($this->anyResponseData));
+        
+        $this->buildTestObj();
+        
+        $actual = $this->controller->authorizePusher();
+        
+        $this->assertEquals($this->anyResponseData, $actual->content->get());
+        $this->assertEquals('application/json', $actual->content->getType());
+        $this->assertEquals(200, $actual->status->getCode());
+    }
+    
+    public function testTriggerPusherEventReturns200IfEventSent()
+    {        
+        $this->webFactory = new \Aura\Web\WebFactory(array(
+            '_POST' => array(                
+                'channel_name' => $this->anyChannelName,
+                'event_name' => $this->anyEventName,
                 'event_data' => $this->anyEventData
             )
         ));
@@ -292,7 +351,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     
         $this->pusher->expects($this->once())
             ->method('trigger')
-            ->with($this->anyEventName, $this->anyChannelName, $this->anyEventData)
+            ->with($this->anyChannelName, $this->anyEventName, $this->anyEventData)
             ->will($this->returnValue(true));
         
         $this->buildTestObj();      

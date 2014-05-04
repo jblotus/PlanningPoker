@@ -180,4 +180,21 @@ class AuthServiceTest extends \PHPUnit_Framework_TestCase
         $actual = $this->authService->getAuthUrl();
         $this->assertEquals($this->anyAuthUrl, $actual);
     }
+    
+    public function testGetUserEmailDoesIt()
+    {
+        $this->session->expects($this->once())
+            ->method('newSegment')
+            ->with('user')
+            ->will($this->returnValue($this->anySegment));
+        
+        $this->anySegment->expects($this->at(0))
+            ->method('__get')
+            ->with('email')
+            ->will($this->returnValue($this->anyAttributes['contact/email']));
+        
+        $actual = $this->authService->getUserEmail();
+        
+        $this->assertEquals($this->anyAttributes['contact/email'], $actual);
+    }
 }

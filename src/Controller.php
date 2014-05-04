@@ -93,6 +93,22 @@ class Controller
         $this->response->content->set("The user has not logged in");
         return $this->response;                
     }
+  
+    public function authorizePusher()
+    {
+        if ($this->authService->isLoggedIn()) {
+            $post = $this->request->post;
+            $channel = $post->get('channel_name');
+            $socketId = $post->get('socket_id');
+            $userId = $this->authService->getUserEmail();
+            $responseData = $this->pusher->authorizePresence($channel, $socketId, $userId, array());            
+            $this->response->content->setType('application/json');
+            $this->response->content->set($responseData);
+        } else {
+            $this->response->status->setCode(403);
+        }
+        return $this->response;
+    }
     
     public function triggerPusherEvent()
     {
@@ -114,7 +130,7 @@ class Controller
     private function authenticate()
     {
         if (!$this->authService->isLoggedIn()) {
-            $this->response->redirect->to('/login');            
+            $this->response->redirect->to('/backend/login');            
             return $this->response;
         }
     } 

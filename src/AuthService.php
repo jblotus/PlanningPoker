@@ -50,6 +50,12 @@ class AuthService
         return $this->lightOpenId->authUrl();
     }
   
+    public function getUserEmail()
+    {
+        $segment = $this->getUserSession();
+        return $segment->email; 
+    }
+  
     private function getUserSession()
     {
         return $this->session->newSegment('user');

@@ -20790,9 +20790,9 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     handleVoteClick: function(e) {
       var selected = parseInt($(e.currentTarget).val(), 10) || 'abstain';
       this.model.set('selected', selected);
-        $.post('/pusher', {
+        $.post('/backend/pusher', {
             event: 'changed-vote',
-            channel: 'current-vote',
+            channel: 'presence-planning-poker',
             event_data: {
                 'selected' : selected
             }
@@ -20813,7 +20813,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     url: function() {
       return this.urlRoot;
     },
-    urlRoot: '/get_pivotal_story'
+    urlRoot: '/backend/get_pivotal_story'
   });
   
   App.CurrentStoryView = Backbone.View.extend({
@@ -20853,6 +20853,59 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       return this;
     }
   });
+    
+  App.Router = Backbone.Router.extend({
+    routes: {
+      '' : 'defaultRoute',
+      '/currentStory/:id' : 'currentStoryRoute'
+    },
+    
+    defaultRoute: function() {
+        
+      App.votingButtonsView = new App.VotingButtonsView({
+        model: App.currentVoteModel
+      });
+      App.votingButtonsView.render();
+    
+      App.usersCollection = new App.UsersCollection();
+      
+      App.connectedUsersView = new App.ConnectedUsersView({
+        collection: App.usersCollection
+      });     
+      
+        
+      //temporary autofill
+      $('#pivotalProject').val(395571);
+      $('#pivotalStoryNumber').val(67918638);
+    },
+    currentStoryRoute: function() {
+      
+    }
+  });
+  
+  App.User = Backbone.Model.extend();
+  App.UsersCollection = Backbone.Collection.extend({
+    model: App.User
+  });
+  App.ConnectedUsersView = Backbone.View.extend({
+    el: '#connected-users',    
+    template: Handlebars.compile('<li>{{id}}</li>'),
+    initialize: function() {
+      this.listenTo(this.collection, 'add', this.render);
+      this.listenTo(this.collection, 'remove', this.render);
+    },
+    render: function() {
+      
+      var self = this, 
+          markup = '';
+
+      this.collection.forEach(function(model) {
+        console.log(model);
+        markup += self.template(model.toJSON());
+      });      
+      this.$el.html(markup);
+    }
+  });
   
   $(document).ready(function() {
     
@@ -20878,33 +20931,14 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     
     App.currentVoteModel = new App.CurrentVoteModel();
     
-    App.votingButtonsView = new App.VotingButtonsView({
-      model: App.currentVoteModel
-    });
-    App.votingButtonsView.render();
-    
-    //temporary autofill
-    $('#pivotalProject').val(395571);
-    $('#pivotalStoryNumber').val(67918638);
     
     //real time stuff
-    App.pusher = new Pusher('7f733af21d17ca5e5083');
-    App.Channels = {
-      everything: App.pusher.subscribe('everything'),
-      connections: App.pusher.subscribe('connections'),
-      current_story: App.pusher.subscribe('current-story'),
-      current_vote: App.pusher.subscribe('current-vote')
-    }
-    
-    App.Channels.everything.bind('something', function(data) {      
-      console.log(data, 'triggered by php');
+    App.pusher = new Pusher('7f733af21d17ca5e5083', {
+      authEndpoint: '/backend/authpusher'
     });
+    App.Channel = App.pusher.subscribe('presence-planning-poker')    
     
-    App.Channels.connections.bind('someone-connected', function() {
-      console.log('someone connected');
-    });
-    
-    App.Channels.current_story.bind('loaded-current-story', function(data) {      
+    App.Channel.bind('loaded-current-story', function(data) {
       App.currentStoryModel.fetch({
         data: {
           project_id: data.project_id,
@@ -20914,9 +20948,28 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       });
     });
     
-    App.Channels.current_vote.bind('changed-vote', function(data) {
-      console.log('someone changed vote', data);
+    App.Channel.bind('changed-vote', function(data) {      
       App.currentVoteModel.set('selected', data.selected);
     });
+      
+    App.Channel.bind('pusher:subscription_succeeded', function(members) {
+      members.each(function(member) {
+        var user = new App.User(member);
+        App.usersCollection.add(user);        
+      });
+    });
+      
+    App.Channel.bind('pusher:member_added', function(member) {
+      var member = new App.User(member);
+      App.usersCollection.add(member);      
+    });
+      
+    App.Channel.bind('pusher:member_removed', function(member) {
+      var member = new App.User(member);
+      App.usersCollection.remove(member);      
+    });
+    
+    App.router = new App.Router();
+    Backbone.history.start();
   });
 }(window.App, window.jQuery, window._, window.Backbone, window.Handlebars, window.Pusher));

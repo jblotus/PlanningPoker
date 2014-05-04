@@ -9,10 +9,11 @@ $templateData = $this->getData();
 <?php
   if ($templateData->showLoginLink) {
     ?>
-    <a href="/login">click to login with gmail</a>
+    <a href="/backend/login">click to login with gmail</a>
     <?php
   }
 ?>
+
 
 
 <h3>Current Story</h3>
@@ -28,7 +29,7 @@ $templateData = $this->getData();
   <button type="button" class="btn btn-default" value="3">3</button>
   <button type="button" class="btn btn-default" value="5">5</button>
   <button type="button" class="btn btn-default" value="8">8</button>
-  <button type="button" class="btn btn-default" value="abstain">Abstain</button> 
+  <button type="button" class="btn btn-default" value="abstain">Abstain</button>   
 </script>
 
 <form role="form" id="pivotal-story-loader">
@@ -42,6 +43,14 @@ $templateData = $this->getData();
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
+
+<h4>Connected Users</h4>
+<ul id="connected-users">
+</ul>
+
+<div class="btn-grp">
+  <button type="button" class="btn btn-info" value="cast">Finished Voting</button>
+</div>
 
 <script type="text/x-handlebars" id="story-view-template">  
     <li>Story Name: {{name}}</li>

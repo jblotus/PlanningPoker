@@ -2,11 +2,15 @@ language: php
 php:
   - 5.5
   - 5.4
-  - hhvm
 before_script:
   - composer install
-  - cd tests
+  - npm install karma
+  - npm install karma-jasmine
+  - npm install karma-phantomjs-launcher
+  - npm install -g bower
+  - bower install
 script:
-  - ./vendor/bin/phpunit tests --bootstrap tests/bootstrap.php src
+  - ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS /home/travis/build/jblotus/PlanningPoker/karma.conf.js
+  - /home/travis/build/jblotus/PlanningPoker/vendor/bin/phpunit --bootstrap /home/travis/build/jblotus/PlanningPoker/tests/bootstrap.php /home/travis/build/jblotus/PlanningPoker/tests/src
 
 

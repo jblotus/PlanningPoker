@@ -5,86 +5,12 @@ window.App = window.App || {};
   App.onAjaxError = function() {
     window.alert('The was a problem communicating with the server.');
   };
+
   
-  App.CurrentVoteModel = Backbone.Model.extend({
-    defaults: {
-      selected: 'abstain'
-    }
-  });
-  App.VotingButtonsView = Backbone.View.extend({ 
-    className: 'voting-buttons btn-grp',
-    events: {
-      'click button' : 'handleVoteClick'
-    },
-    initialize: function() {
-      this.listenTo(this.model, 'change:selected', this.render);
-    },
-    handleVoteClick: function(e) {
-      var selected = parseInt($(e.currentTarget).val(), 10) || 'abstain';
-      this.model.set('selected', selected);
-        $.post('/backend/pusher', {
-            event: 'changed-vote',
-            channel: 'presence-planning-poker',
-            event_data: {
-                'selected' : selected
-            }
-        });
-    },
-    render: function() {
-      var selected = this.model.get('selected'); 
-      this.$el.html(this.template()); 
-      
-      this.$el.find('button').removeClass('active');
-      this.$el.find('button[value=' + selected + ']').addClass('active');
-      this.$el.appendTo($('#my-cards'));
-      return this;
-    }
-  });
-  
-  App.Story = Backbone.Model.extend({
-    url: function() {
-      return this.urlRoot;
-    },
-    urlRoot: '/backend/get_pivotal_story'
-  });
-  
-  App.CurrentStoryView = Backbone.View.extend({
-    el: '#current-story',
-    initialize: function() {
-      this.listenTo(this.model, 'change', this.render);      
-    },
-    render: function() {      
-      var content = this.template(this.model.toJSON());      
-      this.$el.html(content);
-      return this;
-    }
-  }); 
+
+
     
-  App.StoryInputView = Backbone.View.extend({    
-    el: '#pivotal-story-loader',
-    initialize: function() {
-      _.bindAll(this, ['submit']);
-    },
-    events: {
-      'submit' : 'submit',
-    },
-    submit: function(e) {
-      e.preventDefault();
-      var projectId = this.$el.find('input[name=project_id]').val();
-      var storyId = this.$el.find('input[name=story_id]').val();
-      
-      this.model.fetch({
-        data: {
-          project_id: projectId,
-          story_id: storyId
-        },
-        error: App.onAjaxError
-      });
-    },
-    render: function() {
-      return this;
-    }
-  });
+
     
   App.Router = Backbone.Router.extend({
     routes: {
@@ -115,28 +41,7 @@ window.App = window.App || {};
     }
   });
   
-  App.User = Backbone.Model.extend();
-  App.UsersCollection = Backbone.Collection.extend({
-    model: App.User
-  });
-  App.ConnectedUsersView = Backbone.View.extend({
-    el: '#connected-users',    
-    template: Handlebars.compile('<li>{{id}}</li>'),
-    initialize: function() {
-      this.listenTo(this.collection, 'add', this.render);
-      this.listenTo(this.collection, 'remove', this.render);
-    },
-    render: function() {
-      
-      var self = this, 
-          markup = '';
-
-      this.collection.forEach(function(model) {    
-        markup += self.template(model.toJSON());
-      });      
-      this.$el.html(markup);
-    }
-  });
+   
   
   $(document).ready(function() {
     

@@ -21,6 +21,7 @@ module.exports = function(config) {
       './bower_components/handlebars/handlebars.js',
       './bower_components/bootstrap/dist/js/bootstrap.js',      
       'webroot/assets/javascript/testshim.js',
+      'webroot/assets/javascript/src/modules/*.js',
       'webroot/assets/javascript/src/app.js',
       'webroot/assets/javascript/tests/*.spec.js',
     ],

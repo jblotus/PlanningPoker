@@ -23,6 +23,7 @@ module.exports = function(config) {
       'webroot/assets/javascript/testshim.js',
       'webroot/assets/javascript/src/modules/*.js',
       'webroot/assets/javascript/src/app.js',
+      'webroot/assets/javascript/tests/modules/*.spec.js',
       'webroot/assets/javascript/tests/*.spec.js',
     ],
 
@@ -43,7 +44,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['spec'],
 
 
     // web server port

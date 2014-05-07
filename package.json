@@ -28,5 +28,8 @@
     "grunt-phpunit": "^0.3.3",
     "karma": "^0.12.14",
     "grunt-karma": "^0.8.2"
+  },
+  "dependencies": {
+    "karma-spec-reporter": "0.0.12"
   }
 }

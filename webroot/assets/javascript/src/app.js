@@ -6,11 +6,6 @@ window.App = window.App || {};
     window.alert('The was a problem communicating with the server.');
   };
 
-  
-
-
-    
-
     
   App.Router = Backbone.Router.extend({
     routes: {
@@ -19,17 +14,7 @@ window.App = window.App || {};
     },
     
     defaultRoute: function() {
-        
-      App.votingButtonsView = new App.VotingButtonsView({
-        model: App.currentVoteModel
-      });
-      App.votingButtonsView.render();
-    
-      App.usersCollection = new App.UsersCollection();
-      
-      App.connectedUsersView = new App.ConnectedUsersView({
-        collection: App.usersCollection
-      });     
+
       
         
       //temporary autofill
@@ -67,43 +52,28 @@ window.App = window.App || {};
     
     App.currentVoteModel = new App.CurrentVoteModel();
     
+    App.votingButtonsView = new App.VotingButtonsView({
+      model: App.currentVoteModel
+    });
+    App.votingButtonsView.render();
+    
+    App.usersCollection = new App.UsersCollection();
+    
+    App.connectedUsersView = new App.ConnectedUsersView({
+      collection: App.usersCollection
+    });     
     
     //real time stuff
     App.pusher = new Pusher('7f733af21d17ca5e5083', {
       authEndpoint: '/backend/authpusher'
     });
-    App.Channel = App.pusher.subscribe('presence-planning-poker')    
+             
+
     
-    App.Channel.bind('loaded-current-story', function(data) {
-      App.currentStoryModel.fetch({
-        data: {
-          project_id: data.project_id,
-          story_id: data.story_id
-        },
-        error: App.onAjaxError
-      });
-    });
-    
-    App.Channel.bind('changed-vote', function(data) {      
-      App.currentVoteModel.set('selected', data.selected);
-    });
-      
-    App.Channel.bind('pusher:subscription_succeeded', function(members) {
-      members.each(function(member) {
-        var user = new App.User(member);
-        App.usersCollection.add(user);        
-      });
-    });
-      
-    App.Channel.bind('pusher:member_added', function(member) {
-      var member = new App.User(member);
-      App.usersCollection.add(member);      
-    });
-      
-    App.Channel.bind('pusher:member_removed', function(member) {
-      var member = new App.User(member);
-      App.usersCollection.remove(member);      
-    });
+    App.channel = new App.Channel(App.pusher);
+    App.channel.subscribe('presence-planning-poker') ;    
+    App.channel.bindUserEvents(App.usersCollection);
+
     
     App.router = new App.Router();
     Backbone.history.start();

@@ -8,6 +8,8 @@ before_script:
   - npm install karma-jasmine
   - npm install karma-phantomjs-launcher
   - npm install karma-spec-reporter
+  - npm install karma-coverage
+  - npm install karma-coveralls
   - npm install -g bower
   - bower install
 script:

@@ -30,6 +30,9 @@
     "grunt-karma": "^0.8.2"
   },
   "dependencies": {
-    "karma-spec-reporter": "0.0.12"
+    "karma-spec-reporter": "0.0.12",
+    "coveralls": "^2.10.0",
+    "karma-coveralls": "^0.1.4",
+    "karma-coverage": "^0.2.1"
   }
 }

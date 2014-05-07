@@ -3,7 +3,7 @@ php:
   - 5.5
   - 5.4
 before_script:
-  - composer install
+  - composer install --dev --no-interaction
   - npm install karma
   - npm install karma-jasmine
   - npm install karma-phantomjs-launcher
@@ -14,6 +14,7 @@ before_script:
   - bower install
 script:
   - ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS /home/travis/build/jblotus/PlanningPoker/karma.conf.js
-  - /home/travis/build/jblotus/PlanningPoker/vendor/bin/phpunit --bootstrap /home/travis/build/jblotus/PlanningPoker/tests/bootstrap.php /home/travis/build/jblotus/PlanningPoker/tests/src
-
+  - mkdir -p build/logs
+  - /home/travis/build/jblotus/PlanningPoker/vendor/bin/phpunit --coverage-clover build/logs/clover.xml --bootstrap /home/travis/build/jblotus/PlanningPoker/tests/bootstrap.php /home/travis/build/jblotus/PlanningPoker/tests/src
+  - /home/travis/build/jblotus/PlanningPoker/vendor/bin/coveralls
 

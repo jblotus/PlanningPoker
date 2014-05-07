@@ -22,7 +22,8 @@ $templateData = $this->getData();
       </ul>
     </div>
     
-    <div class="col-md-6">
+    <div id="story-area" class="col-md-6">
+      <script type="text/x-handlebars" id="story-area-template">
       <h3>Current Story</h3>
       <ul id="current-story"></ul>
       
@@ -36,7 +37,8 @@ $templateData = $this->getData();
           <input type="input" class="form-control" id="pivotalStoryNumber" name="story_id" placeholder="Enter Story #">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
-      </form>   
+      </form>
+      </script>
     </div>
  
   </div>
@@ -64,6 +66,10 @@ $templateData = $this->getData();
   
   <div class="top-buffer row">
     
+  </div>
+  
+  <div id="vote-session-buttons">
+    <button class="start btn">Start Session</button>
   </div>
   
 </div>

@@ -10,26 +10,58 @@ window.App = window.App || {};
   App.Router = Backbone.Router.extend({
     routes: {
       '' : 'defaultRoute',
+      'startSession' : 'startSession',
       '/currentStory/:id' : 'currentStoryRoute'
     },
     
     defaultRoute: function() {
-
+console.log('default route');
+      var voteSessionButtonsView = new App.VoteSessionButtonsView({
+        router: this
+      });
+      voteSessionButtonsView.render();
       
         
-      //temporary autofill
-      $('#pivotalProject').val(395571);
-      $('#pivotalStoryNumber').val(67918638);
+
     },
     currentStoryRoute: function() {
       
+    },
+    
+    startSession: function() {
+      console.log('starting new session');
+
+      
+      App.currentStoryModel = new App.Story();
+      
+      App.currentStoryView = new App.CurrentStoryView({
+        model: App.currentStoryModel
+      });
+      
+      App.storyInputView = new App.StoryInputView({
+        model: App.currentStoryModel
+      });    
+      
+      App.storyInputView.render();
+      
+      App.currentVoteModel = new App.CurrentVoteModel();
+      
+      App.votingButtonsView = new App.VotingButtonsView({
+        model: App.currentVoteModel
+      });
+      App.votingButtonsView.render();
+      
+      //temporary autofill
+      $('#pivotalProject').val(395571);
+      $('#pivotalStoryNumber').val(67918638);
     }
+    
   });
   
    
   
-  $(document).ready(function() {
-    
+  $(document).ready(function() {    
+   
     //set up templates here since they are on the dom
     App.storyViewTemplate = Handlebars.compile($('#story-view-template').html() || '');
     App.CurrentStoryView.prototype.template = App.storyViewTemplate;
@@ -37,25 +69,9 @@ window.App = window.App || {};
     
     App.votingButtonsViewTemplate = Handlebars.compile($('#voting-buttons-view-template').html() || '');
     App.VotingButtonsView.prototype.template = App.votingButtonsViewTemplate;
-            
-    App.currentStoryModel = new App.Story();
     
-    App.currentStoryView = new App.CurrentStoryView({
-      model: App.currentStoryModel
-    });
-    
-    App.storyInputView = new App.StoryInputView({
-      model: App.currentStoryModel
-    });    
-    
-    App.storyInputView.render();
-    
-    App.currentVoteModel = new App.CurrentVoteModel();
-    
-    App.votingButtonsView = new App.VotingButtonsView({
-      model: App.currentVoteModel
-    });
-    App.votingButtonsView.render();
+    App.storyInputViewTemplate = Handlebars.compile($('#story-area-template').html() || '');
+    App.StoryInputView.prototype.template = App.storyInputViewTemplate;
     
     App.usersCollection = new App.UsersCollection();
     

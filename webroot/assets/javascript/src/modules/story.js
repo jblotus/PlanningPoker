@@ -21,10 +21,10 @@ window.App = window.App || {};
       this.$el.html(content);
       return this;
     }
-  }); 
-  
+  });
+
   exports.StoryInputView = Backbone.View.extend({
-    el: '#pivotal-story-loader',
+    el: '#story-area',
     initialize: function() {
       _.bindAll(this, ['submit']);
     },
@@ -45,6 +45,7 @@ window.App = window.App || {};
       });
     },
     render: function() {
+      this.$el.html(this.template({}));
       return this;
     }
   });

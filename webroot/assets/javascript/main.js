@@ -20785,7 +20785,6 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     
     bindUserEvents: function(usersCollection) {
       this.channel.bind('pusher:subscription_succeeded', function(members) {
-        console.log('anything', usersCollection, members)
         members.each(function(member) {
           var user = new usersCollection.model(member);
           usersCollection.add(user);        
@@ -20819,14 +20818,25 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       });
     }
   };
-  
-   
-    
-
-      
-
-  
  
+}(window.App, window._, window.Backbone));;window.App = window.App || {};
+
+(function(exports, _, Backbone) { 
+  "use strict";  
+  
+  exports.VoteSessionButtonsView = Backbone.View.extend({
+    el: '#vote-session-buttons',    
+    events: {
+      'click .start' : 'startSession',
+    },
+    startSession: function() {
+      exports.router.navigate('startSession', { trigger: true});
+    },
+    render: function() {
+      return this;
+    }
+  });
+  
 }(window.App, window._, window.Backbone));;window.App = window.App || {};
 
 (function(exports, _, Backbone) { 
@@ -20850,10 +20860,10 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       this.$el.html(content);
       return this;
     }
-  }); 
-  
+  });
+
   exports.StoryInputView = Backbone.View.extend({
-    el: '#pivotal-story-loader',
+    el: '#story-area',
     initialize: function() {
       _.bindAll(this, ['submit']);
     },
@@ -20874,6 +20884,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       });
     },
     render: function() {
+      this.$el.html(this.template({}));
       return this;
     }
   });
@@ -20959,52 +20970,68 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
   App.Router = Backbone.Router.extend({
     routes: {
       '' : 'defaultRoute',
+      'startSession' : 'startSession',
       '/currentStory/:id' : 'currentStoryRoute'
     },
     
     defaultRoute: function() {
-
+console.log('default route');
+      var voteSessionButtonsView = new App.VoteSessionButtonsView({
+        router: this
+      });
+      voteSessionButtonsView.render();
       
         
-      //temporary autofill
-      $('#pivotalProject').val(395571);
-      $('#pivotalStoryNumber').val(67918638);
+
     },
     currentStoryRoute: function() {
       
+    },
+    
+    startSession: function() {
+      console.log('starting new session');
+      //set up templates here since they are on the dom
+      App.storyViewTemplate = Handlebars.compile($('#story-view-template').html() || '');
+      App.CurrentStoryView.prototype.template = App.storyViewTemplate;
+      
+      
+      App.votingButtonsViewTemplate = Handlebars.compile($('#voting-buttons-view-template').html() || '');
+      App.VotingButtonsView.prototype.template = App.votingButtonsViewTemplate;
+      
+      App.storyInputViewTemplate = Handlebars.compile($('#story-area-template').html() || '');
+      App.StoryInputView.prototype.template = App.storyInputViewTemplate;
+      
+      App.currentStoryModel = new App.Story();
+      
+      App.currentStoryView = new App.CurrentStoryView({
+        model: App.currentStoryModel
+      });
+      
+      App.storyInputView = new App.StoryInputView({
+        model: App.currentStoryModel
+      });    
+      
+      App.storyInputView.render();
+      
+      App.currentVoteModel = new App.CurrentVoteModel();
+      
+      App.votingButtonsView = new App.VotingButtonsView({
+        model: App.currentVoteModel
+      });
+      App.votingButtonsView.render();
+      
+      //temporary autofill
+      $('#pivotalProject').val(395571);
+      $('#pivotalStoryNumber').val(67918638);
     }
+    
   });
   
    
   
   $(document).ready(function() {
     
-    //set up templates here since they are on the dom
-    App.storyViewTemplate = Handlebars.compile($('#story-view-template').html() || '');
-    App.CurrentStoryView.prototype.template = App.storyViewTemplate;
-    
-    
-    App.votingButtonsViewTemplate = Handlebars.compile($('#voting-buttons-view-template').html() || '');
-    App.VotingButtonsView.prototype.template = App.votingButtonsViewTemplate;
-            
-    App.currentStoryModel = new App.Story();
-    
-    App.currentStoryView = new App.CurrentStoryView({
-      model: App.currentStoryModel
-    });
-    
-    App.storyInputView = new App.StoryInputView({
-      model: App.currentStoryModel
-    });    
-    
-    App.storyInputView.render();
-    
-    App.currentVoteModel = new App.CurrentVoteModel();
-    
-    App.votingButtonsView = new App.VotingButtonsView({
-      model: App.currentVoteModel
-    });
-    App.votingButtonsView.render();
+   
     
     App.usersCollection = new App.UsersCollection();
     

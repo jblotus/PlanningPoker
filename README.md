@@ -2,7 +2,7 @@ PlanningPoker
 =============
 [![Hack jblotus/PlanningPoker on Nitrous.IO](https://d3o0mnbgv6k92a.cloudfront.net/assets/hack-l-v1-3cc067e71372f6045e1949af9d96095b.png)](https://www.nitrous.io/hack_button?source=embed&runtime=php&repo=jblotus%2FPlanningPoker)
 [![Build Status](https://travis-ci.org/jblotus/PlanningPoker.svg?branch=master)](https://travis-ci.org/jblotus/PlanningPoker)
-[![Coverage Status](https://coveralls.io/repos/jblotus/PlanningPoker/badge.png)](https://coveralls.io/r/jblotus/PlanningPoker)
+[![Coverage Status](https://coveralls.io/repos/jblotus/PlanningPoker/badge.png?branch=master)](https://coveralls.io/r/jblotus/PlanningPoker?branch=master)
 
 An application for helping remote teams participate in planning poker estimation sessions and sending them off to pivotal tracker.
 

@@ -16,5 +16,5 @@ script:
   - ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS /home/travis/build/jblotus/PlanningPoker/karma.conf.js
   - mkdir -p build/logs
   - /home/travis/build/jblotus/PlanningPoker/vendor/bin/phpunit --coverage-clover build/logs/clover.xml --bootstrap /home/travis/build/jblotus/PlanningPoker/tests/bootstrap.php /home/travis/build/jblotus/PlanningPoker/tests/src
-  - /home/travis/build/jblotus/PlanningPoker/vendor/bin/coveralls
+  - /home/travis/build/jblotus/PlanningPoker/vendor/bin/coveralls -v
 
